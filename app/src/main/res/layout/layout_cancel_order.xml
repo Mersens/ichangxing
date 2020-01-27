@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="216dp"
+        android:background="@drawable/dialog_bg"
+        android:orientation="vertical"
+        android:layout_margin="16dp"
+        >
+        <RelativeLayout
+            android:layout_height="36dp"
+            android:layout_width="match_parent"
+            >
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:id="@+id/img_close"
+                android:src="@mipmap/icon_close_blue"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="8dp"
+                />
+
+
+        </RelativeLayout>
+        <View
+            android:layout_height="1dp"
+            android:layout_width="match_parent"
+            android:background="@color/color_line_text"
+            android:layout_marginTop="4dp"
+            />
+
+        <com.hykc.cityfreight.view.ContainsEmojiEditText
+            android:id="@+id/editText"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="@null"
+            android:gravity="top"
+            android:hint="请输入反馈内容"
+            android:maxLines="10"
+            android:textColorHint="@color/color_line_text"
+            android:textCursorDrawable="@null"
+            android:textSize="@dimen/text_size_medium" />
+        <View
+            android:layout_height="24dp"
+            android:layout_width="match_parent"
+            />
+        <Button
+            android:id="@+id/btn"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:text="确定"
+            android:textColor="@color/base_color_text_white"
+            android:textSize="16sp"
+            android:background="@drawable/btn_login_bg"
+            />
+
+
+    </LinearLayout>
+</LinearLayout>

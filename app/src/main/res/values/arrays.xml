@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="cc">
+        <item>4.2米</item>
+        <item>4.5米</item>
+        <item>5米</item>
+        <item>6.2米</item>
+        <item>6.8米</item>
+        <item>7.2米</item>
+        <item>7.7米</item>
+        <item>7.8米</item>
+        <item>8.2米</item>
+        <item>8.6米</item>
+        <item>8.7米</item>
+        <item>9.6米</item>
+        <item>11.7米</item>
+        <item>12.5米</item>
+        <item>13米</item>
+        <item>13.5米</item>
+        <item>14米</item>
+        <item>16米</item>
+        <item>17米</item>
+        <item>17.5米</item>
+        <item>18米</item>
+    </string-array>
+
+
+    <string-array name="cx">
+        <item>重型普通货车</item>
+        <item>轻型仓栅式货车</item>
+        <item>重型仓栅式货车</item>
+        <item>普通货车</item>
+        <item>厢式货车</item>
+        <item>罐式货车</item>
+        <item>牵引车</item>
+        <item>仓栅式货车</item>
+        <item>封闭货车</item>
+        <item>平板货车</item>
+        <item>集装箱车</item>
+        <item>自卸货车</item>
+        <item>特殊结构货车</item>
+        <item>专项作业车</item>
+        <item>车辆运输车</item>
+        <item>车辆运输车(单排)</item>
+
+<!--        <item>重型半挂牵引车</item>
+        <item>普通挂车</item>
+        <item>罐式挂车</item>
+        <item>集装箱挂车</item>
+        <item>厢式挂车</item>
+        <item>仓栅式挂车</item>
+        <item>平板挂车</item>
+        <item>自卸挂车</item>
+        <item>专项作业挂车</item>-->
+
+    </string-array>
+
+</resources>

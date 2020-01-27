@@ -1,0 +1,1426 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/base_color_text_white"
+    android:fitsSystemWindows="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
+    <include layout="@layout/layout_toolbar"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+            <RelativeLayout
+                android:layout_height="40dp"
+                android:layout_width="match_parent"
+                android:background="#f8f8f8"
+                >
+                <TextView
+                    android:id="@+id/status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="认证状态："
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:textSize="14sp"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@color/text_color_black"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="状态"
+                    android:layout_toRightOf="@+id/status"
+                    android:layout_centerVertical="true"
+                    android:textSize="14sp"
+                    android:layout_marginLeft="5dp"
+                    android:textColor="@color/text_color_black"
+                    />
+            </RelativeLayout>>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                >
+                <RelativeLayout
+                    android:layout_height="40dp"
+                    android:layout_width="match_parent"
+                    >
+                    <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="*"
+                        android:layout_alignParentLeft="true"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="14sp"
+                        android:id="@+id/name_x"
+                        android:layout_centerVertical="true"
+                        />
+                    <TextView
+                        android:id="@+id/name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                       android:layout_toRightOf="@+id/name_x"
+                        android:layout_centerVertical="true"
+                        android:text="真实姓名:"
+                        android:layout_marginLeft="4dp"
+                        android:textColor="@color/text_color_black"
+                        android:textSize="@dimen/text_size_medium" />
+
+                    <EditText
+                        android:id="@+id/editName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="7dp"
+                        android:layout_marginRight="7dp"
+                        android:layout_toRightOf="@+id/name"
+                        android:background="@null"
+                        android:hint="请输入真实姓名"
+                        android:inputType="text"
+                        android:singleLine="true"
+                        android:text=""
+                        android:textColor="#0f2536"
+                        android:textColorHint="#CECECE"
+                        android:textSize="14sp" />
+
+                </RelativeLayout>>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/color_line_text"
+                    />
+                <RelativeLayout
+                    android:layout_height="40dp"
+                    android:layout_width="match_parent"
+                    >
+                    <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="*"
+                        android:layout_alignParentLeft="true"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="14sp"
+                        android:id="@+id/jsz_x"
+                        android:layout_centerVertical="true"
+                        />
+                    <TextView
+                        android:id="@+id/jsz"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/jsz_x"
+                        android:layout_centerVertical="true"
+                        android:text="驾驶证号:"
+                        android:layout_marginLeft="4dp"
+                        android:textColor="@color/text_color_black"
+                        android:textSize="@dimen/text_size_medium" />
+
+                    <EditText
+                        android:id="@+id/editJSZ"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="7dp"
+                        android:layout_marginRight="7dp"
+                        android:layout_toRightOf="@+id/jsz"
+                        android:background="@null"
+                        android:hint="请输入驾驶证号"
+                        android:inputType="text"
+                        android:singleLine="true"
+                        android:text=""
+                        android:textColor="#0f2536"
+                        android:textColorHint="#CECECE"
+                        android:textSize="14sp" />
+
+                </RelativeLayout>>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/color_line_text"
+                    />
+                <RelativeLayout
+                    android:layout_height="40dp"
+                    android:layout_width="match_parent"
+                    >
+                    <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="*"
+                        android:layout_alignParentLeft="true"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="14sp"
+                        android:id="@+id/sfz_x"
+                        android:layout_centerVertical="true"
+                        />
+                    <TextView
+                        android:id="@+id/sfz"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/sfz_x"
+                        android:layout_centerVertical="true"
+                        android:text="身份证号:"
+                        android:layout_marginLeft="4dp"
+                        android:textColor="@color/text_color_black"
+                        android:textSize="@dimen/text_size_medium" />
+
+                    <EditText
+                        android:id="@+id/editSFZ"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="7dp"
+                        android:layout_marginRight="7dp"
+                        android:layout_toRightOf="@+id/sfz"
+                        android:background="@null"
+                        android:hint="请输入身份证号"
+                        android:inputType="text"
+                        android:singleLine="true"
+                        android:text=""
+                        android:textColor="#0f2536"
+                        android:textColorHint="#CECECE"
+                        android:textSize="14sp" />
+
+                </RelativeLayout>>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/color_line_text"
+                    />
+                <RelativeLayout
+                    android:layout_height="40dp"
+                    android:layout_width="match_parent"
+                    >
+                    <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="*"
+                        android:layout_alignParentLeft="true"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="14sp"
+                        android:id="@+id/cph_x"
+                        android:layout_centerVertical="true"
+                        />
+                    <TextView
+                        android:id="@+id/cph"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/cph_x"
+                        android:layout_centerVertical="true"
+                        android:text="车牌号:"
+                        android:layout_marginLeft="4dp"
+                        android:textColor="@color/text_color_black"
+                        android:textSize="@dimen/text_size_medium" />
+
+                    <EditText
+                        android:id="@+id/editCPH"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="7dp"
+                        android:layout_marginRight="7dp"
+                        android:layout_toRightOf="@+id/cph"
+                        android:background="@null"
+                        android:hint="请输入车牌号"
+                        android:inputType="text"
+                        android:singleLine="true"
+                        android:text=""
+                        android:textColor="#0f2536"
+                        android:textColorHint="#CECECE"
+                        android:textSize="14sp" />
+
+                </RelativeLayout>>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/color_line_text"
+                    />
+
+                <RelativeLayout
+                    android:layout_height="36dp"
+                    android:layout_width="match_parent"
+                    >
+                    <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="*"
+                        android:layout_alignParentLeft="true"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="14sp"
+                        android:id="@+id/jsz_img_x"
+                        android:layout_centerVertical="true"
+                        />
+                    <TextView
+                        android:id="@+id/jsz_img"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/jsz_img_x"
+                        android:layout_centerVertical="true"
+                        android:text="驾驶证正副页"
+                        android:layout_marginLeft="4dp"
+                        android:textColor="@color/text_color_black"
+                        android:textSize="@dimen/text_size_medium" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/jsz_img"
+                        android:layout_centerVertical="true"
+                        android:text="(请确保证件无死角完整，文字清晰可读)"
+                        android:layout_marginLeft="4dp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:textColor="@color/text_color"
+                        android:textSize="10sp"
+
+                        />
+
+                </RelativeLayout>>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/img_thz"
+                        android:layout_width="200dp"
+                        android:layout_height="118dp"
+                        android:scaleType="center"
+                        android:background="#f8f8f8"
+                        android:src="@mipmap/icon_photo_yao" />
+
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/color_line_text"
+                    android:layout_marginTop="10dp"
+                    />
+                <RelativeLayout
+                    android:layout_height="36dp"
+                    android:layout_width="match_parent"
+                    >
+                    <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="*"
+                        android:layout_alignParentLeft="true"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="14sp"
+                        android:id="@+id/sfz_img_x"
+                        android:layout_centerVertical="true"
+                        />
+                    <TextView
+                        android:id="@+id/sfz_img"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/sfz_img_x"
+                        android:layout_centerVertical="true"
+                        android:text="身份证"
+                        android:layout_marginLeft="4dp"
+                        android:textColor="@color/text_color_black"
+                        android:textSize="@dimen/text_size_medium" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/sfz_img"
+                        android:layout_centerVertical="true"
+                        android:text="(请确保证件无死角完整，文字清晰可读)"
+                        android:layout_marginLeft="4dp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:textColor="@color/text_color"
+                        android:textSize="10sp"
+
+                        />
+
+                </RelativeLayout>
+                <LinearLayout
+                    android:layout_height="125dp"
+                    android:layout_width="match_parent"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:orientation="horizontal"
+                    >
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        >
+                        <ImageView
+                            android:id="@+id/img_sfz_z"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:scaleType="center"
+                            android:background="#f8f8f8"
+                            android:layout_centerInParent="true"
+                            android:src="@mipmap/icon_photo_yao" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="12sp"
+                            android:text="(正面)"
+                            android:layout_centerHorizontal="true"
+                            android:layout_below="@+id/img_sfz_z"
+                            android:layout_marginTop="4dp"
+                            android:textColor="@color/text_color_black"
+                            />
+
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        >
+                        <ImageView
+                            android:id="@+id/img_sfz_f"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:scaleType="center"
+                            android:background="#f8f8f8"
+                            android:layout_centerInParent="true"
+                            android:src="@mipmap/icon_photo_yao" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="12sp"
+                            android:text="(反面)"
+                            android:layout_marginTop="4dp"
+                            android:layout_centerHorizontal="true"
+                            android:layout_below="@+id/img_sfz_f"
+                            android:textColor="@color/text_color_black"
+                            />
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        >
+                        <ImageView
+                            android:id="@+id/img_all"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:scaleType="center"
+                            android:background="#f8f8f8"
+                            android:layout_centerInParent="true"
+                            android:src="@mipmap/icon_photo_yao" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="12sp"
+                            android:text="(人证合一)"
+                            android:layout_marginTop="4dp"
+                            android:layout_centerHorizontal="true"
+                            android:layout_below="@+id/img_all"
+                            android:textColor="@color/text_color_black"
+                            />
+                    </RelativeLayout>
+                </LinearLayout>
+                <View
+                    android:layout_height="1dp"
+                    android:layout_width="match_parent"
+                    android:background="@color/color_line_text"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    />
+
+            </LinearLayout>
+            <RelativeLayout
+                android:layout_height="40dp"
+                android:layout_width="match_parent"
+                android:background="#f8f8f8"
+                >
+                <TextView
+                    android:id="@+id/carstatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="车辆认证："
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:textSize="14sp"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@color/text_color_black"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_carstatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="状态"
+                    android:layout_toRightOf="@+id/carstatus"
+                    android:layout_centerVertical="true"
+                    android:textSize="14sp"
+                    android:layout_marginLeft="5dp"
+                    android:textColor="@color/text_color_black"
+                    />
+            </RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            >
+            <RelativeLayout
+                android:layout_height="36dp"
+                android:layout_width="match_parent"
+                >
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="*"
+                    android:layout_alignParentLeft="true"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="14sp"
+                    android:id="@+id/xsz_img_x"
+                    android:layout_centerVertical="true"
+                    />
+                <TextView
+                    android:id="@+id/xsz_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/xsz_img_x"
+                    android:layout_centerVertical="true"
+                    android:text="行驶证正副页"
+                    android:layout_marginLeft="4dp"
+                    android:textColor="@color/text_color_black"
+                    android:textSize="@dimen/text_size_medium" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/xsz_img"
+                    android:layout_centerVertical="true"
+                    android:text="(请确保证件无死角完整，文字清晰可读)"
+                    android:layout_marginLeft="4dp"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:textColor="@color/text_color"
+                    android:textSize="10sp"
+
+                    />
+
+            </RelativeLayout>>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/img_xsz"
+                    android:layout_width="200dp"
+                    android:layout_height="118dp"
+                    android:scaleType="center"
+                    android:background="#f8f8f8"
+                    android:src="@mipmap/icon_photo_yao" />
+
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/color_line_text"
+                android:layout_marginTop="10dp"
+                />
+            <RelativeLayout
+                android:layout_height="36dp"
+                android:layout_width="match_parent"
+                >
+
+                <TextView
+                    android:id="@+id/ctz_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="车头照"
+                    android:layout_marginLeft="4dp"
+                    android:textColor="@color/text_color_black"
+                    android:textSize="@dimen/text_size_medium" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/ctz_img"
+                    android:layout_centerVertical="true"
+                    android:text="(请确保证件无死角完整，文字清晰可读)"
+                    android:layout_marginLeft="4dp"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:textColor="@color/text_color"
+                    android:textSize="10sp"
+
+                    />
+
+            </RelativeLayout>>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/img_ctz"
+                    android:layout_width="200dp"
+                    android:layout_height="118dp"
+                    android:scaleType="center"
+                    android:background="#f8f8f8"
+                    android:src="@mipmap/icon_photo_yao" />
+
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/color_line_text"
+                android:layout_marginTop="10dp"
+                />
+            <RelativeLayout
+                android:layout_height="36dp"
+                android:layout_width="match_parent"
+                >
+
+                <TextView
+                    android:id="@+id/cdz_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="车斗照"
+                    android:layout_marginLeft="4dp"
+                    android:textColor="@color/text_color_black"
+                    android:textSize="@dimen/text_size_medium" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/cdz_img"
+                    android:layout_centerVertical="true"
+                    android:text="(请确保证件无死角完整，文字清晰可读)"
+                    android:layout_marginLeft="4dp"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:textColor="@color/text_color"
+                    android:textSize="10sp"
+
+                    />
+
+            </RelativeLayout>>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/img_cdz"
+                    android:layout_width="200dp"
+                    android:layout_height="118dp"
+                    android:scaleType="center"
+                    android:background="#f8f8f8"
+                    android:src="@mipmap/icon_photo_yao" />
+
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/color_line_text"
+                android:layout_marginTop="10dp"
+                />
+            <RelativeLayout
+                android:layout_height="36dp"
+                android:layout_width="match_parent"
+                >
+
+                <TextView
+                    android:id="@+id/clbx_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="车辆保险"
+                    android:layout_marginLeft="4dp"
+                    android:textColor="@color/text_color_black"
+                    android:textSize="@dimen/text_size_medium" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/clbx_img"
+                    android:layout_centerVertical="true"
+                    android:text="(请确保证件无死角完整，文字清晰可读)"
+                    android:layout_marginLeft="4dp"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:textColor="@color/text_color"
+                    android:textSize="10sp"
+
+                    />
+
+            </RelativeLayout>>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/img_clbx"
+                    android:layout_width="200dp"
+                    android:layout_height="118dp"
+                    android:scaleType="center"
+                    android:background="#f8f8f8"
+                    android:src="@mipmap/icon_photo_yao" />
+
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/color_line_text"
+                android:layout_marginTop="10dp"
+                />
+
+            <RelativeLayout
+                android:layout_height="36dp"
+                android:layout_width="match_parent"
+                >
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="*"
+                    android:layout_alignParentLeft="true"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="14sp"
+                    android:id="@+id/clyyz_img_x"
+                    android:layout_centerVertical="true"
+                    />
+                <TextView
+                    android:id="@+id/clyyz_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/clyyz_img_x"
+                    android:layout_centerVertical="true"
+                    android:text="车辆运营证"
+                    android:layout_marginLeft="4dp"
+                    android:textColor="@color/text_color_black"
+                    android:textSize="@dimen/text_size_medium" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/clyyz_img"
+                    android:layout_centerVertical="true"
+                    android:text="(请确保证件无死角完整，文字清晰可读)"
+                    android:layout_marginLeft="4dp"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:textColor="@color/text_color"
+                    android:textSize="10sp"
+
+                    />
+
+            </RelativeLayout>>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:layout_marginBottom="10dp"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/img_clyyz"
+                    android:layout_width="200dp"
+                    android:layout_height="118dp"
+                    android:scaleType="center"
+                    android:background="#f8f8f8"
+                    android:src="@mipmap/icon_photo_yao" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/color_line_text"
+                />
+
+
+            <RelativeLayout
+                android:layout_height="40dp"
+                android:layout_width="match_parent"
+                >
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="*"
+                    android:layout_alignParentLeft="true"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="14sp"
+                    android:id="@+id/dlyszh_x"
+                    android:layout_centerVertical="true"
+                    />
+                <TextView
+                    android:id="@+id/dlyszh"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/dlyszh_x"
+                    android:layout_centerVertical="true"
+                    android:text="道路运输证号:"
+                    android:layout_marginLeft="4dp"
+                    android:textColor="@color/text_color_black"
+                    android:textSize="@dimen/text_size_medium" />
+
+                <EditText
+                    android:id="@+id/editDlyszh"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="7dp"
+                    android:layout_marginRight="7dp"
+                    android:layout_toRightOf="@+id/dlyszh"
+                    android:background="@null"
+                    android:hint="请输入道路运输证号"
+                    android:inputType="text"
+                    android:singleLine="true"
+                    android:text=""
+                    android:textColor="#0f2536"
+                    android:textColorHint="#CECECE"
+                    android:textSize="14sp" />
+
+            </RelativeLayout>>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/color_line_text"
+                />
+            <RelativeLayout
+                android:layout_height="40dp"
+                android:layout_width="match_parent"
+                >
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="*"
+                    android:layout_alignParentLeft="true"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="14sp"
+                    android:id="@+id/cyzgzh_x"
+                    android:layout_centerVertical="true"
+                    />
+                <TextView
+                    android:id="@+id/cyzgzh"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/cyzgzh_x"
+                    android:layout_centerVertical="true"
+                    android:text="从业资格证号:"
+                    android:layout_marginLeft="4dp"
+                    android:textColor="@color/text_color_black"
+                    android:textSize="@dimen/text_size_medium" />
+
+                <EditText
+                    android:id="@+id/editCyzgzh"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="7dp"
+                    android:layout_marginRight="7dp"
+                    android:layout_toRightOf="@+id/cyzgzh"
+                    android:background="@null"
+                    android:hint="从业资格证号"
+                    android:inputType="text"
+                    android:singleLine="true"
+                    android:text=""
+                    android:textColor="#0f2536"
+                    android:textColorHint="#CECECE"
+                    android:textSize="14sp" />
+
+            </RelativeLayout>>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/color_line_text"
+                />
+
+            <RelativeLayout
+                android:layout_height="36dp"
+                android:layout_width="match_parent"
+                >
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="*"
+                    android:layout_alignParentLeft="true"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="14sp"
+                    android:id="@+id/cyzgz_img_x"
+                    android:layout_centerVertical="true"
+                    />
+                <TextView
+                    android:id="@+id/cyzgz_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/cyzgz_img_x"
+                    android:layout_centerVertical="true"
+                    android:text="从业资格证照"
+                    android:layout_marginLeft="4dp"
+                    android:textColor="@color/text_color_black"
+                    android:textSize="@dimen/text_size_medium" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/cyzgz_img"
+                    android:layout_centerVertical="true"
+                    android:text="(请确保证件无死角完整，文字清晰可读)"
+                    android:layout_marginLeft="4dp"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:textColor="@color/text_color"
+                    android:textSize="10sp"
+
+                    />
+
+            </RelativeLayout>>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/img_cyzgz"
+                    android:layout_width="200dp"
+                    android:layout_height="118dp"
+                    android:scaleType="center"
+                    android:background="#f8f8f8"
+                    android:src="@mipmap/icon_photo_yao" />
+
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/color_line_text"
+                android:layout_marginTop="10dp"
+                />
+            <LinearLayout
+                android:layout_height="40dp"
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                >
+                <TextView
+                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:text="保险日期"
+                    android:layout_alignParentLeft="true"
+                    android:textColor="@color/text_color_black"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:id="@+id/bxrq"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="5dp"
+                    />
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="28dp"
+                    android:orientation="horizontal"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    >
+                    <TextView
+                        android:id="@+id/tv_bxrq_start"
+                        android:layout_height="match_parent"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:textColor="@color/text_color_black"
+                        tools:text="qqqqqq"
+                        android:textSize="14sp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/time_select_bg"
+                        />
+                    <TextView
+                        android:layout_height="match_parent"
+                        android:layout_width="wrap_content"
+                        android:gravity="center"
+                        android:textColor="@color/text_color_black"
+                        android:text="至"
+                        android:textSize="12sp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_gravity="center_vertical"
+                        />
+                    <TextView
+                        android:id="@+id/tv_bxrq_end"
+                        android:layout_height="match_parent"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:textSize="14sp"
+                        tools:text="qqqqqq"
+                        android:textColor="@color/text_color_black"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/time_select_bg"
+                        />
+
+                </LinearLayout>
+
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/color_line_text"
+                />
+
+            <RelativeLayout
+                android:layout_height="42dp"
+                android:layout_width="match_parent"
+                >
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="*"
+                    android:layout_alignParentLeft="true"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="14sp"
+                    android:id="@+id/cx_x"
+                    android:layout_centerVertical="true"
+                    />
+                <TextView
+                    android:id="@+id/cx"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/cx_x"
+                    android:layout_centerVertical="true"
+                    android:text="车型:"
+                    android:layout_marginLeft="4dp"
+                    android:textColor="@color/text_color_black"
+                    android:textSize="@dimen/text_size_medium" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/cx"
+                    >
+                    <Spinner
+                        android:id="@+id/cxSpinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerVertical="true"
+                        android:spinnerMode="dialog"
+                        />
+                </RelativeLayout>
+
+            </RelativeLayout>>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/color_line_text"
+                />
+
+            <RelativeLayout
+                android:layout_height="42dp"
+                android:layout_width="match_parent"
+                >
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="*"
+                    android:layout_alignParentLeft="true"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="14sp"
+                    android:id="@+id/cc_x"
+                    android:layout_centerVertical="true"
+                    />
+                <TextView
+                    android:id="@+id/cc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/cc_x"
+                    android:layout_centerVertical="true"
+                    android:text="车长:"
+                    android:layout_marginLeft="4dp"
+                    android:textColor="@color/text_color_black"
+                    android:textSize="@dimen/text_size_medium" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/cc"
+
+                    >
+                    <Spinner
+                        android:id="@+id/ccSpinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerVertical="true"
+                        android:spinnerMode="dialog"
+                        />
+                </RelativeLayout>
+
+            </RelativeLayout>>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/color_line_text"
+                />
+
+            <RelativeLayout
+                android:layout_height="40dp"
+                android:layout_width="match_parent"
+                >
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="*"
+                    android:layout_alignParentLeft="true"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="14sp"
+                    android:id="@+id/hdzz_x"
+                    android:layout_centerVertical="true"
+                    />
+                <TextView
+                    android:id="@+id/hdzz"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/hdzz_x"
+                    android:layout_centerVertical="true"
+                    android:text="核定载重(吨):"
+                    android:layout_marginLeft="4dp"
+                    android:textColor="@color/text_color_black"
+                    android:textSize="@dimen/text_size_medium" />
+
+                <EditText
+                    android:id="@+id/editHdzz"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="7dp"
+                    android:layout_marginRight="7dp"
+                    android:layout_toRightOf="@+id/hdzz"
+                    android:background="@null"
+                    android:hint="请输入核定载重"
+                    android:inputType="numberDecimal"
+                    android:singleLine="true"
+                    android:text=""
+                    android:textColor="#0f2536"
+                    android:textColorHint="#CECECE"
+                    android:textSize="14sp" />
+
+            </RelativeLayout>>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/color_line_text"
+                />
+            <RelativeLayout
+                android:layout_height="40dp"
+                android:layout_width="match_parent"
+                >
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="*"
+                    android:layout_alignParentLeft="true"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="14sp"
+                    android:id="@+id/scdh_x"
+                    android:layout_centerVertical="true"
+                    />
+                <TextView
+                    android:id="@+id/scdh"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/scdh_x"
+                    android:layout_centerVertical="true"
+                    android:text="随车电话:"
+                    android:layout_marginLeft="4dp"
+                    android:textColor="@color/text_color_black"
+                    android:textSize="@dimen/text_size_medium" />
+
+                <EditText
+                    android:id="@+id/editScdh"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="7dp"
+                    android:layout_marginRight="7dp"
+                    android:layout_toRightOf="@+id/scdh"
+                    android:background="@null"
+                    android:hint="请输入随车电话"
+                    android:inputType="number"
+                    android:singleLine="true"
+                    android:text=""
+                    android:textColor="#0f2536"
+                    android:textColorHint="#CECECE"
+                    android:textSize="14sp" />
+
+            </RelativeLayout>>
+
+        </LinearLayout>
+        <RelativeLayout
+            android:layout_height="40dp"
+            android:layout_width="match_parent"
+            android:background="#f8f8f8"
+            >
+            <TextView
+                android:id="@+id/cyrxx"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="承运人信息"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:textSize="14sp"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/text_color_black"
+                />
+        </RelativeLayout>>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            >
+            <RelativeLayout
+                android:layout_height="40dp"
+                android:layout_width="match_parent"
+                >
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="所属承运人："
+                    android:layout_alignParentLeft="true"
+                    android:textColor="@color/text_color_black"
+                    android:textSize="14sp"
+                    android:id="@+id/sscyr"
+                    android:layout_centerVertical="true"
+                    />
+
+
+                <EditText
+                    android:id="@+id/editSscyr"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="7dp"
+                    android:layout_marginRight="7dp"
+                    android:layout_toRightOf="@+id/sscyr"
+                    android:background="@null"
+                    android:hint="请输入所属承运人"
+                    android:inputType="text"
+                    android:singleLine="true"
+                    android:text=""
+                    android:textColor="#0f2536"
+                    android:textColorHint="#CECECE"
+                    android:textSize="14sp" />
+
+            </RelativeLayout>>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/color_line_text"
+                />
+            <RelativeLayout
+                android:layout_height="40dp"
+                android:layout_width="match_parent"
+                >
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="道路运输证号："
+                    android:layout_alignParentLeft="true"
+                    android:textColor="@color/text_color_black"
+                    android:textSize="14sp"
+                    android:id="@+id/cyr_dlyszh"
+                    android:layout_centerVertical="true"
+                    />
+
+
+                <EditText
+                    android:id="@+id/editcyr_Sscyr"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="7dp"
+                    android:layout_marginRight="7dp"
+                    android:layout_toRightOf="@+id/cyr_dlyszh"
+                    android:background="@null"
+                    android:hint="请输入道路运输证号"
+                    android:inputType="text"
+                    android:singleLine="true"
+                    android:text=""
+                    android:textColor="#0f2536"
+                    android:textColorHint="#CECECE"
+                    android:textSize="14sp" />
+
+            </RelativeLayout>>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/color_line_text"
+                />
+
+            <RelativeLayout
+                android:layout_height="40dp"
+                android:layout_width="match_parent"
+                >
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="联系人："
+                    android:layout_alignParentLeft="true"
+                    android:textColor="@color/text_color_black"
+                    android:textSize="14sp"
+                    android:id="@+id/lxr"
+                    android:layout_centerVertical="true"
+                    />
+
+
+                <EditText
+                    android:id="@+id/editlxr"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="7dp"
+                    android:layout_marginRight="7dp"
+                    android:layout_toRightOf="@+id/lxr"
+                    android:background="@null"
+                    android:hint="请输入联系人"
+                    android:inputType="text"
+                    android:singleLine="true"
+                    android:text=""
+                    android:textColor="#0f2536"
+                    android:textColorHint="#CECECE"
+                    android:textSize="14sp" />
+
+            </RelativeLayout>>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/color_line_text"
+                />
+            <RelativeLayout
+                android:layout_height="40dp"
+                android:layout_width="match_parent"
+                >
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="联系人电话："
+                    android:layout_alignParentLeft="true"
+                    android:textColor="@color/text_color_black"
+                    android:textSize="14sp"
+                    android:id="@+id/lxrdh"
+                    android:layout_centerVertical="true"
+                    />
+
+
+                <EditText
+                    android:id="@+id/editlxrdh"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="7dp"
+                    android:layout_marginRight="7dp"
+                    android:layout_toRightOf="@+id/lxrdh"
+                    android:background="@null"
+                    android:hint="请输入联系人电话"
+                    android:inputType="number"
+                    android:singleLine="true"
+                    android:text=""
+                    android:textColor="#0f2536"
+                    android:textColorHint="#CECECE"
+                    android:textSize="14sp" />
+
+            </RelativeLayout>>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/color_line_text"
+                />
+            <RelativeLayout
+                android:id="@+id/layout_zcsj"
+                android:layout_height="40dp"
+                android:layout_width="match_parent"
+                >
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="注册时间："
+                    android:layout_alignParentLeft="true"
+                    android:textColor="@color/text_color_black"
+                    android:textSize="14sp"
+                    android:id="@+id/zcsj"
+                    android:layout_centerVertical="true"
+                    />
+
+
+                <TextView
+                    android:id="@+id/tv_zcsj"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_color_black"
+                    android:layout_toRightOf="@+id/zcsj"
+                    android:layout_marginLeft="7dp"
+                     />
+
+                <ImageView
+                    android:layout_height="17dp"
+                    android:layout_width="10dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:src="@mipmap/icon_arr_gr"
+                    />
+
+            </RelativeLayout>>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/color_line_text"
+                />
+            <Button
+                android:id="@+id/btnSave"
+                android:layout_marginBottom="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="保存"
+                android:textColor="@color/base_color_text_white"
+                android:textSize="14sp"
+                android:background="@drawable/btn_login_bg"
+                android:layout_marginTop="24dp"
+                />
+        </LinearLayout>
+
+            </LinearLayout>>
+    </ScrollView>
+
+
+</LinearLayout>
