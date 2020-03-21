@@ -13,10 +13,12 @@ import android.widget.Toast;
 
 import com.cxwl.ichangxing.R;
 import com.cxwl.ichangxing.adapter.FindResourceAdapter;
+import com.cxwl.ichangxing.entity.EventEntity;
 import com.cxwl.ichangxing.entity.GrabParamsEntity;
 import com.cxwl.ichangxing.entity.MsgNoticeEntity;
 import com.cxwl.ichangxing.utils.RequestManager;
 import com.cxwl.ichangxing.utils.ResultObserver;
+import com.cxwl.ichangxing.utils.RxBus;
 import com.cxwl.ichangxing.utils.SPreferenceUtil;
 import com.cxwl.ichangxing.view.LoadingDialogFragment;
 import com.cxwl.ichangxing.view.RecyclerViewNoBugLinearLayoutManager;
@@ -36,6 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import okhttp3.RequestBody;
 
 public class FindResourceFragment extends BaseFragment {
@@ -78,7 +81,7 @@ public class FindResourceFragment extends BaseFragment {
         int color = getResources().getColor(R.color.actionbar_color);
         swipeRefreshLayout.setColorSchemeColors(color, color, color);
         recyclerView.setItemAnimator(null);
-        recyclerView.setLayoutManager(new RecyclerViewNoBugLinearLayoutManager(getActivity()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setItemAnimator(null);
         adapter=new FindResourceAdapter(getActivity(),mList);
         recyclerView.setAdapter(adapter);
@@ -114,6 +117,8 @@ public class FindResourceFragment extends BaseFragment {
                                 if(object.getInt("code")==0){
                                     //查询成功
                                     refreshDatas();
+                                    RxBus.getInstance().send(new EventEntity(EventEntity.WAYBILL_INFO_REFRESH));
+                                    RxBus.getInstance().send(new EventEntity(EventEntity.NOTICE_MSG));
                                     Toast.makeText(getActivity(), "抢单成功！", Toast.LENGTH_SHORT).show();
 
                                 }else {
@@ -221,6 +226,7 @@ public class FindResourceFragment extends BaseFragment {
 
     private void refreshDatas() {
         mList.clear();
+        adapter.setDatas(mList);
         isRefresh = true;
         isLoadMore = false;
         isLoadMoreEmpty = false;
@@ -325,6 +331,12 @@ public class FindResourceFragment extends BaseFragment {
                                             isLoadMoreEmpty = true;
                                         }
                                         isLoadMoreEmpty = true;
+                                        if(isRefresh || isSearch){
+                                            isRefresh=false;
+                                            isSearch=false;
+                                            mList.clear();
+                                            adapter.setDatas(mList);
+                                        }
                                         return;
                                     }else {
                                         isFirst = false;

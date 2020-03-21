@@ -36,11 +36,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.RequestBody;
 
 public class WaybillFragment extends BaseFragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private RelativeLayout mLayoutNoMsg;
+    private CompositeDisposable mCompositeDisposable;
     private RecyclerView recyclerView;
     private static final int pageSize = 10;
     private int pageCurrent = 1;
@@ -66,13 +71,38 @@ public class WaybillFragment extends BaseFragment {
         int color = getResources().getColor(R.color.actionbar_color);
         swipeRefreshLayout.setColorSchemeColors(color, color, color);
         recyclerView.setItemAnimator(null);
-        recyclerView.setLayoutManager(new RecyclerViewNoBugLinearLayoutManager(getActivity()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setItemAnimator(null);
         adapter=new WaybillAdapter(getActivity(),mList);
         recyclerView.setAdapter(adapter);
         mLayoutNoMsg=view.findViewById(R.id.layout_nomsg);
         mLayoutNoMsg.setVisibility(View.GONE);
         initEvent();
+        initBus();
+    }
+
+    private void initBus() {
+        mCompositeDisposable = new CompositeDisposable();
+        //监听订阅事件
+        Disposable d = RxBus.getInstance()
+                .toObservable()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        if (o instanceof EventEntity) {
+                            EventEntity e = (EventEntity) o;
+                            int type = e.type;
+                            if (type==EventEntity.WAYBILL_INFO_REFRESH) {
+                                refreshDatas();
+                            }
+                        }
+                    }
+                });
+        //subscription交给compositeSubscription进行管理，防止内存溢出
+        mCompositeDisposable.add(d);
+
     }
     private void initEvent() {
         adapter.setOnButtonClickListener(new WaybillAdapter.OnButtonClickListener() {
@@ -177,6 +207,7 @@ public class WaybillFragment extends BaseFragment {
                                 if(object.getInt("code")==0){
                                     //查询成功
                                     RxBus.getInstance().send(new EventEntity(EventEntity.START_CAR));
+                                    RxBus.getInstance().send(new EventEntity(EventEntity.NOTICE_MSG));
                                     refreshDatas();
                                     Toast.makeText(getActivity(), "接单成功！", Toast.LENGTH_SHORT).show();
 
@@ -364,6 +395,7 @@ public class WaybillFragment extends BaseFragment {
 
     private void refreshDatas() {
         mList.clear();
+        adapter.setDatas(mList);
         isRefresh = true;
         isLoadMore = false;
         isLoadMoreEmpty = false;
@@ -412,6 +444,12 @@ public class WaybillFragment extends BaseFragment {
                                             isLoadMoreEmpty = true;
                                         }
                                         isLoadMoreEmpty = true;
+                                        if(isRefresh){
+                                            mLayoutNoMsg.setVisibility(View.VISIBLE);
+                                            isRefresh=false;
+                                            mList.clear();
+                                            adapter.setDatas(mList);
+                                        }
                                         return;
                                     }else {
                                         isFirst = false;
@@ -461,6 +499,11 @@ public class WaybillFragment extends BaseFragment {
     }
 
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mCompositeDisposable.clear();
+    }
 
 
 

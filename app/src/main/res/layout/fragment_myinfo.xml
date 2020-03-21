@@ -308,17 +308,18 @@
                 />
             <TextView
                 android:id="@+id/tv_msg_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="10"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                tools:text="12"
                 android:layout_centerVertical="true"
                 android:layout_toLeftOf="@+id/img_arr"
                 android:layout_marginRight="10dp"
                 android:textSize="10sp"
-                android:padding="5dp"
                 android:textColor="@color/base_color_text_white"
                 android:background="@drawable/msg_count_bg"
+                android:gravity="center"
                 android:visibility="gone"
+
                 />
             <ImageView
                 android:id="@+id/img_arr"

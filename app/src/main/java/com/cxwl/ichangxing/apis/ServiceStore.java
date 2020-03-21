@@ -114,6 +114,10 @@ public interface ServiceStore {
     @POST("app/land/track/load")
     Observable<ResponseBody> trackLoad(@Header ("token") String token,@Body RequestBody RequestBody);
 
+
+    @POST("app/location/upload")
+    Observable<ResponseBody> locationUnload(@Header ("token") String token,@Body RequestBody RequestBody);
+
     @POST("app/land/track/unload")
     Observable<ResponseBody> trackUnLoad(@Header ("token") String token,@Body RequestBody RequestBody);
 
@@ -143,6 +147,8 @@ public interface ServiceStore {
     @POST("app/order/receipt")
     Observable<ResponseBody> receipt(@Header ("token") String token,@Body RequestBody RequestBody);
 
+    @POST("app/land/track/receipt")
+    Observable<ResponseBody> trackReceipt(@Header ("token") String token,@Body RequestBody RequestBody);
     @POST("app/basic/dict")
     Observable<ResponseBody> dict(@Header ("token") String token,@Query("type") String type );
 

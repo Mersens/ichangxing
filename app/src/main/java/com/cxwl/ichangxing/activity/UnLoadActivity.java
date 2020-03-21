@@ -13,9 +13,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
 import com.bumptech.glide.Glide;
 import com.cxwl.ichangxing.R;
 import com.cxwl.ichangxing.app.Constants;
+import com.cxwl.ichangxing.entity.OrdLocationDto;
 import com.cxwl.ichangxing.entity.TrackLoadEntity;
 import com.cxwl.ichangxing.fragment.LandTrackUnload;
 import com.cxwl.ichangxing.utils.GlideImageLoader;
@@ -25,6 +30,9 @@ import com.cxwl.ichangxing.utils.SPreferenceUtil;
 import com.cxwl.ichangxing.view.LoadingDialogFragment;
 import com.cxwl.ichangxing.view.SelectDialog;
 import com.google.gson.Gson;
+import com.hdgq.locationlib.LocationOpenApi;
+import com.hdgq.locationlib.entity.ShippingNoteInfo;
+import com.hdgq.locationlib.listener.OnResultListener;
 import com.lzy.imagepicker.ImagePicker;
 import com.lzy.imagepicker.bean.ImageItem;
 import com.lzy.imagepicker.ui.ImageGridActivity;
@@ -56,7 +64,30 @@ public class UnLoadActivity extends BaseActivity {
     private Button mBtn;
     private LandTrackUnload entity=new LandTrackUnload();
     private String trackId;
+    String orderNo;
+    private OrdLocationDto ordLocationDto=new OrdLocationDto();
+    public AMapLocationClient mLocationClient = null;
+    public AMapLocationClientOption mLocationOption = null;
+    public AMapLocationListener mLocationListener = new AMapLocationListener() {
 
+        @Override
+        public void onLocationChanged(AMapLocation aMapLocation) {
+            if (aMapLocation != null) {
+                if (aMapLocation.getErrorCode() == 0) {
+                    ordLocationDto.setEndCountrySubdivisionCode(aMapLocation.getAdCode());
+                    ordLocationDto.setLatitude(aMapLocation.getLatitude()+"");
+                    ordLocationDto.setLongitude(aMapLocation.getLongitude()+"");
+                    ordLocationDto.setType("1");
+                    ordLocationDto.setShippingNoteNumber(orderNo);
+                    Log.e("ordLocationDto",ordLocationDto.toString());
+                } else {
+                    Log.e("AmapError", "location Error, ErrCode:"
+                            + aMapLocation.getErrorCode() + ", errInfo:"
+                            + aMapLocation.getErrorInfo());
+                }
+            }
+        }
+    };
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,9 +98,10 @@ public class UnLoadActivity extends BaseActivity {
     @Override
     public void init() {
         trackId=getIntent().getStringExtra("trackId");
-
+        orderNo=getIntent().getStringExtra("orderNo");
         initViews();
         initEvent();
+        initLocation();
         initImagePicker();
         try {
             initDatas();
@@ -78,7 +110,19 @@ public class UnLoadActivity extends BaseActivity {
         }
 
     }
+    private void initLocation() {
+        mLocationClient = new AMapLocationClient(getApplicationContext());
+        //设置定位回调监听
+        mLocationClient.setLocationListener(mLocationListener);
+        mLocationOption = new AMapLocationClientOption();
+        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+        mLocationOption.setOnceLocation(true);
+        mLocationOption.setNeedAddress(true);
+        mLocationClient.setLocationOption(mLocationOption);
+        //启动定位
+        mLocationClient.startLocation();
 
+    }
     private void initDatas() throws JSONException {
         String token= SPreferenceUtil.getInstance(UnLoadActivity.this).getToken();
         if(TextUtils.isEmpty(token)){
@@ -90,7 +134,7 @@ public class UnLoadActivity extends BaseActivity {
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json"), object.toString());
         RequestManager.getInstance()
                 .mServiceStore
-                .getUnload(token,body)
+                .getReceipt(token,body)
                 .subscribeOn(io.reactivex.schedulers.Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new ResultObserver(new RequestManager.onRequestCallBack() {
@@ -102,14 +146,13 @@ public class UnLoadActivity extends BaseActivity {
                                 JSONObject object=new JSONObject(msg);
                                 if(object.getInt("code")==0){
                                     //成功
-                                    JSONArray array=object.getJSONArray("data");
-                                    if(array.length()>0){
-                                        JSONObject jsonObject=array.getJSONObject(0);
+
+                                    JSONObject jsonObject=object.getJSONObject("data");
                                         Gson gson=new Gson();
                                         LandTrackUnload trackLoadEntity=gson.fromJson(jsonObject.toString(),LandTrackUnload.class);
                                         setLoadInfo(trackLoadEntity);
 
-                                    }
+
 
 
                                 }else {
@@ -137,9 +180,14 @@ public class UnLoadActivity extends BaseActivity {
     private void setLoadInfo(LandTrackUnload trackLoadEntity) {
         entity=trackLoadEntity;
         int enterWeight=trackLoadEntity.getOutWeight();
-        String url=trackLoadEntity.getAfterTruckBodyImg();
+        String url=trackLoadEntity.getImg1();
         mEdit.setText(enterWeight+"");
-        mTextZHDZ.setText(entity.getUnloadAddr());
+        List<String> mList=entity.getUnloadAddrs();
+        if(mList.size()>0){
+            String string=mList.get(0);
+            mTextZHDZ.setText(string);
+        }
+
         if(!TextUtils.isEmpty(url)){
             Glide.with(this)
                     .load(Constants.PICTURE_HOST+url)
@@ -285,7 +333,7 @@ public class UnLoadActivity extends BaseActivity {
                                     //上传成功
                                     Toast.makeText(UnLoadActivity.this, "上传成功！", Toast.LENGTH_SHORT).show();
                                     String url=object.getString("data");
-                                    entity.setAfterTruckBodyImg(url);
+                                    entity.setImg1(url);
                                 }else {
                                     Toast.makeText(UnLoadActivity.this, object.getString("message"),
                                             Toast.LENGTH_SHORT).show();
@@ -315,11 +363,16 @@ public class UnLoadActivity extends BaseActivity {
             Toast.makeText(this, "请填写净重！", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(TextUtils.isEmpty(entity.getAfterTruckBodyImg())){
+        int intWeught=Integer.parseInt(strEnterWeight);
+        if(intWeught==0){
+            Toast.makeText(this, "净重不能为0！", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(TextUtils.isEmpty(entity.getImg1())){
             Toast.makeText(this, "请上传卸货货磅单照片", Toast.LENGTH_SHORT).show();
             return;
         }
-        String token= SPreferenceUtil.getInstance(UnLoadActivity.this).getToken();
+       final String token= SPreferenceUtil.getInstance(UnLoadActivity.this).getToken();
         if(TextUtils.isEmpty(token)){
             Toast.makeText(UnLoadActivity.this, "token为空，请重新登录", Toast.LENGTH_SHORT).show();
             return;
@@ -327,12 +380,14 @@ public class UnLoadActivity extends BaseActivity {
         Gson gson=new Gson();
         entity.setTrackId(entity.getTrackId());
         entity.setOutWeight(Integer.parseInt(strEnterWeight));
+        Log.e("trackUnLoad params","=="+gson.toJson(entity));
+
         final LoadingDialogFragment dialogFragment=LoadingDialogFragment.getInstance();
         dialogFragment.showF(getSupportFragmentManager(),"trackUnLoad");
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json"), gson.toJson(entity));
         RequestManager.getInstance()
                 .mServiceStore
-                .trackUnLoad(token,body)
+                .trackReceipt(token,body)
                 .subscribeOn(io.reactivex.schedulers.Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new ResultObserver(new RequestManager.onRequestCallBack() {
@@ -345,6 +400,11 @@ public class UnLoadActivity extends BaseActivity {
                                 JSONObject object=new JSONObject(msg);
                                 if(object.getInt("code")==0){
                                     //上传成功
+                                    stopOpenApi();
+                                    locationUnLoad(token);
+                                    mBtn.setBackgroundResource(R.drawable.btn_noclick_bg);
+                                    mBtn.setEnabled(false);
+                                    mBtn.setClickable(false);
                                     Toast.makeText(UnLoadActivity.this, "卸货成功！", Toast.LENGTH_SHORT).show();
 
                                 }else {
@@ -368,7 +428,49 @@ public class UnLoadActivity extends BaseActivity {
 
                     }
                 }));
+    }
 
+    private void locationUnLoad(String token){
+        Gson gson = new Gson();
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json"), gson.toJson(ordLocationDto));
+        RequestManager.getInstance()
+                .mServiceStore
+                .locationUnload(token, body)
+                .subscribeOn(io.reactivex.schedulers.Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new ResultObserver(new RequestManager.onRequestCallBack() {
+                    @Override
+                    public void onSuccess(String msg) {
+                        Log.e("locationUnload", "locationUnload==" + msg);
+                    }
+                    @Override
+                    public void onError(String msg) {
+                        Log.e("locationUnload", "onError==" + msg);
+
+                    }
+                }));
+
+    }
+
+    private void stopOpenApi(){
+        ShippingNoteInfo[] shippingNoteInfos=new ShippingNoteInfo[1];
+        ShippingNoteInfo shippingNoteInfo=new ShippingNoteInfo();
+        shippingNoteInfo.setShippingNoteNumber(orderNo);
+        shippingNoteInfo.setSerialNumber("");
+        shippingNoteInfo.setStartCountrySubdivisionCode(ordLocationDto.getStartCountrySubdivisionCode());
+        shippingNoteInfo.setEndCountrySubdivisionCode("");
+        shippingNoteInfos[0]=shippingNoteInfo;
+        LocationOpenApi.stop(UnLoadActivity.this, shippingNoteInfos, new OnResultListener() {
+            @Override
+            public void onSuccess() {
+                Log.e("LocationOpenApi","onApiStop onSuccess");
+            }
+
+            @Override
+            public void onFailure(String s, String s1) {
+                Log.e("LocationOpenApi","onApiStop onFailure="+s+";"+s1);
+            }
+        });
 
     }
 }

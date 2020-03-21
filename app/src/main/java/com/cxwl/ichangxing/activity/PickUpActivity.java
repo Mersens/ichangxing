@@ -15,11 +15,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.cxwl.ichangxing.R;
 import com.cxwl.ichangxing.app.Constants;
 import com.cxwl.ichangxing.entity.AssignParamsEntity;
+import com.cxwl.ichangxing.entity.OrdLocationDto;
 import com.cxwl.ichangxing.entity.TrackLoadEntity;
 import com.cxwl.ichangxing.utils.GlideImageLoader;
 import com.cxwl.ichangxing.utils.RequestManager;
@@ -29,6 +34,9 @@ import com.cxwl.ichangxing.view.LoadingDialogFragment;
 import com.cxwl.ichangxing.view.SelectDialog;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.hdgq.locationlib.LocationOpenApi;
+import com.hdgq.locationlib.entity.ShippingNoteInfo;
+import com.hdgq.locationlib.listener.OnResultListener;
 import com.lzy.imagepicker.ImagePicker;
 import com.lzy.imagepicker.bean.ImageItem;
 import com.lzy.imagepicker.ui.ImageGridActivity;
@@ -57,31 +65,70 @@ public class PickUpActivity extends BaseActivity {
     private TextView mTextTitle;
     private LayoutInflater inflater;
     String trackId;
-
-    private List<TrackLoadEntity> entities=new ArrayList<>();
-    private List<View> views=new ArrayList<>();
+    String orderNo;
+    private List<TrackLoadEntity> entities = new ArrayList<>();
+    private List<View> views = new ArrayList<>();
     private int imgIndex;
 
+    private OrdLocationDto ordLocationDto=new OrdLocationDto();
+    public AMapLocationClient mLocationClient = null;
+    public AMapLocationClientOption mLocationOption = null;
+    public AMapLocationListener mLocationListener = new AMapLocationListener() {
+
+        @Override
+        public void onLocationChanged(AMapLocation aMapLocation) {
+            if (aMapLocation != null) {
+                if (aMapLocation.getErrorCode() == 0) {
+                    ordLocationDto.setStartCountrySubdivisionCode(aMapLocation.getAdCode());
+                    ordLocationDto.setLatitude(aMapLocation.getLatitude()+"");
+                    ordLocationDto.setLongitude(aMapLocation.getLongitude()+"");
+                    ordLocationDto.setType("0");
+                    ordLocationDto.setShippingNoteNumber(orderNo);
+                    Log.e("ordLocationDto",ordLocationDto.toString());
+                } else {
+                    Log.e("AmapError", "location Error, ErrCode:"
+                            + aMapLocation.getErrorCode() + ", errInfo:"
+                            + aMapLocation.getErrorInfo());
+                }
+            }
+        }
+    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_pickup);
-        inflater=LayoutInflater.from(this);
+        inflater = LayoutInflater.from(this);
         init();
     }
 
     @Override
     public void init() {
-        trackId=getIntent().getStringExtra("trackId");
+        trackId = getIntent().getStringExtra("trackId");
+        orderNo=getIntent().getStringExtra("orderNo");
         initViews();
         initEvent();
+        initLocation();
         initImagePicker();
         try {
             initDatas();
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+    }
+
+    private void initLocation() {
+        mLocationClient = new AMapLocationClient(getApplicationContext());
+        //设置定位回调监听
+        mLocationClient.setLocationListener(mLocationListener);
+        mLocationOption = new AMapLocationClientOption();
+        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+        mLocationOption.setOnceLocation(true);
+        mLocationOption.setNeedAddress(true);
+        mLocationClient.setLocationOption(mLocationOption);
+        //启动定位
+        mLocationClient.startLocation();
 
     }
 
@@ -110,16 +157,14 @@ public class PickUpActivity extends BaseActivity {
                                     //成功
                                     JSONArray array = object.getJSONArray("data");
                                     if (array.length() > 0) {
-                                        for (int i = 0; i <array.length() ; i++) {
+                                        for (int i = 0; i < array.length(); i++) {
                                             JSONObject jsonObject = array.getJSONObject(i);
                                             Gson gson = new Gson();
                                             TrackLoadEntity trackLoadEntity = gson.fromJson(jsonObject.toString(), TrackLoadEntity.class);
                                             entities.add(trackLoadEntity);
-                                            setLoadInfo(trackLoadEntity,i);
+                                            setLoadInfo(trackLoadEntity, i);
                                         }
-
                                     }
-
 
                                 } else {
                                     Toast.makeText(PickUpActivity.this, object.getString("message"),
@@ -133,7 +178,6 @@ public class PickUpActivity extends BaseActivity {
                             Toast.makeText(PickUpActivity.this, "获取失败！", Toast.LENGTH_SHORT).show();
                         }
                     }
-
                     @Override
                     public void onError(String msg) {
                         Log.e("getLoad", "onError==" + msg);
@@ -143,8 +187,8 @@ public class PickUpActivity extends BaseActivity {
                 }));
     }
 
-   private void setLoadInfo(TrackLoadEntity trackLoadEntity,int pos) {
-        View view=getMainView( trackLoadEntity,pos);
+    private void setLoadInfo(TrackLoadEntity trackLoadEntity, int pos) {
+        View view = getMainView(trackLoadEntity, pos);
         mLayoutMain.addView(view);
         views.add(view);
     }
@@ -167,18 +211,18 @@ public class PickUpActivity extends BaseActivity {
         mImgBack = findViewById(R.id.imgBack);
         mTextTitle = findViewById(R.id.tv_title);
         mTextTitle.setText("装货磅单");
-        mLayoutMain=findViewById(R.id.layout_main);
+        mLayoutMain = findViewById(R.id.layout_main);
         mLayoutMain.removeAllViews();
 
     }
 
-    private View getMainView(TrackLoadEntity trackLoadEntity ,int pos){
-        View view=inflater.inflate(R.layout.layout_pickup_view,null);
-       TextView mTextZHDZ = view.findViewById(R.id.tv_zhdz);
-       ImageView mImg = view.findViewById(R.id.img_thz);
-       EditText mEdit = view.findViewById(R.id.editdw);
-       Button mBtn = view.findViewById(R.id.btn_sc);
-       mTextZHDZ.setText(trackLoadEntity.getLoadAddr());
+    private View getMainView(TrackLoadEntity trackLoadEntity, int pos) {
+        View view = inflater.inflate(R.layout.layout_pickup_view, null);
+        TextView mTextZHDZ = view.findViewById(R.id.tv_zhdz);
+        ImageView mImg = view.findViewById(R.id.img_thz);
+        EditText mEdit = view.findViewById(R.id.editdw);
+        Button mBtn = view.findViewById(R.id.btn_sc);
+        mTextZHDZ.setText(trackLoadEntity.getLoadAddr());
         int enterWeight = trackLoadEntity.getEnterWeight();
         String url = trackLoadEntity.getBeforeLoadCommodityImg();
         mEdit.setText(enterWeight + "");
@@ -190,17 +234,16 @@ public class PickUpActivity extends BaseActivity {
 
         mBtn.setOnClickListener(new MySaveClickListener(pos));
         mImg.setOnClickListener(new MySetImgClickListener(pos));
-       return view;
+        return view;
     }
 
 
+    class MySaveClickListener implements View.OnClickListener {
+        private int pos;
 
-    class MySaveClickListener implements View.OnClickListener{
-       private int pos;
-
-       public MySaveClickListener(int pos){
-           this.pos=pos;
-       }
+        public MySaveClickListener(int pos) {
+            this.pos = pos;
+        }
 
         @Override
         public void onClick(View v) {
@@ -208,15 +251,16 @@ public class PickUpActivity extends BaseActivity {
         }
     }
 
-    class MySetImgClickListener implements View.OnClickListener{
+    class MySetImgClickListener implements View.OnClickListener {
         private int pos;
-        public MySetImgClickListener(int pos){
-            this.pos=pos;
+
+        public MySetImgClickListener(int pos) {
+            this.pos = pos;
         }
 
         @Override
         public void onClick(View v) {
-            imgIndex=pos;
+            imgIndex = pos;
             setImg();
         }
     }
@@ -295,21 +339,20 @@ public class PickUpActivity extends BaseActivity {
             Toast.makeText(this, "请选择照片！", Toast.LENGTH_SHORT).show();
             return;
         }
-        ImageView mImg=views.get(imgIndex).findViewById(R.id.img_thz);
+        ImageView mImg = views.get(imgIndex).findViewById(R.id.img_thz);
         mImg.setScaleType(ImageView.ScaleType.CENTER_CROP);
         ImagePicker.getInstance().getImageLoader().displayImage(PickUpActivity.this, imageItem.path, mImg, 0, 0);
         File file = new File(imageItem.path);
         RequestBody fileRQ = RequestBody.create(MediaType.parse("image/*"), file);
         Log.e("fileName", file.getName());
         MultipartBody.Part part = MultipartBody.Part.createFormData("file", file.getName(), fileRQ);
-
         String token = SPreferenceUtil.getInstance(PickUpActivity.this).getToken();
         if (TextUtils.isEmpty(token)) {
             Toast.makeText(PickUpActivity.this, "token为空，请重新登录", Toast.LENGTH_SHORT).show();
             return;
         }
         final LoadingDialogFragment dialogFragment = LoadingDialogFragment.getInstance();
-        dialogFragment.showF(getSupportFragmentManager(), "uploadCargo"+imgIndex);
+        dialogFragment.showF(getSupportFragmentManager(), "uploadCargo" + imgIndex);
         RequestManager.getInstance()
                 .mServiceStore
                 .uploadCargo(token, part)
@@ -353,29 +396,37 @@ public class PickUpActivity extends BaseActivity {
     }
 
     private void doSave(int pos) {
-        View view =views.get(pos);
-        EditText mEdit=view.findViewById(R.id.editdw);
+        View view = views.get(pos);
+        EditText mEdit = view.findViewById(R.id.editdw);
+        final Button btn = view.findViewById(R.id.btn_sc);
         final String strEnterWeight = mEdit.getText().toString().trim();
         if (TextUtils.isEmpty(strEnterWeight)) {
             Toast.makeText(this, "请填写净重！", Toast.LENGTH_SHORT).show();
             return;
         }
-        TrackLoadEntity entity=entities.get(pos);
+        int intWeught = Integer.parseInt(strEnterWeight);
+        if (intWeught == 0) {
+            Toast.makeText(this, "净重不能为0！", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        TrackLoadEntity entity = entities.get(pos);
         if (TextUtils.isEmpty(entity.getBeforeLoadCommodityImg())) {
             Toast.makeText(this, "请上传装货磅单照片", Toast.LENGTH_SHORT).show();
             return;
         }
-        String token = SPreferenceUtil.getInstance(PickUpActivity.this).getToken();
+        final String token = SPreferenceUtil.getInstance(PickUpActivity.this).getToken();
         if (TextUtils.isEmpty(token)) {
             Toast.makeText(PickUpActivity.this, "token为空，请重新登录", Toast.LENGTH_SHORT).show();
             return;
         }
+
         Gson gson = new Gson();
         entity.setTrackId(entity.getTrackId());
         entity.setEnterWeight(Integer.parseInt(strEnterWeight));
         final LoadingDialogFragment dialogFragment = LoadingDialogFragment.getInstance();
         dialogFragment.showF(getSupportFragmentManager(), "trackLoad");
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json"), gson.toJson(entity));
+        final TrackLoadEntity trackLoadEntity=entity;
         RequestManager.getInstance()
                 .mServiceStore
                 .trackLoad(token, body)
@@ -391,6 +442,11 @@ public class PickUpActivity extends BaseActivity {
                                 JSONObject object = new JSONObject(msg);
                                 if (object.getInt("code") == 0) {
                                     //上传成功
+                                    startOpenApi(trackLoadEntity);
+                                    locationUnLoad(token);
+                                    btn.setBackgroundResource(R.drawable.btn_noclick_bg);
+                                    btn.setEnabled(false);
+                                    btn.setClickable(false);
                                     Toast.makeText(PickUpActivity.this, "装货成功！", Toast.LENGTH_SHORT).show();
 
                                 } else {
@@ -405,7 +461,6 @@ public class PickUpActivity extends BaseActivity {
                             Toast.makeText(PickUpActivity.this, "装货失败！", Toast.LENGTH_SHORT).show();
                         }
                     }
-
                     @Override
                     public void onError(String msg) {
                         dialogFragment.dismissAllowingStateLoss();
@@ -414,7 +469,50 @@ public class PickUpActivity extends BaseActivity {
 
                     }
                 }));
+    }
 
+    private void locationUnLoad(String token){
+        Gson gson = new Gson();
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json"), gson.toJson(ordLocationDto));
+        RequestManager.getInstance()
+                .mServiceStore
+                .locationUnload(token, body)
+                .subscribeOn(io.reactivex.schedulers.Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new ResultObserver(new RequestManager.onRequestCallBack() {
+                    @Override
+                    public void onSuccess(String msg) {
+                        Log.e("locationUnload", "locationUnload==" + msg);
+                    }
+                    @Override
+                    public void onError(String msg) {
+                        Log.e("locationUnload", "onError==" + msg);
+
+                    }
+                }));
 
     }
+
+    private void startOpenApi(TrackLoadEntity entity){
+        ShippingNoteInfo[] shippingNoteInfos=new ShippingNoteInfo[1];
+        ShippingNoteInfo shippingNoteInfo=new ShippingNoteInfo();
+        shippingNoteInfo.setShippingNoteNumber(orderNo);
+        shippingNoteInfo.setSerialNumber("");
+        shippingNoteInfo.setStartCountrySubdivisionCode(ordLocationDto.getStartCountrySubdivisionCode());
+        shippingNoteInfo.setEndCountrySubdivisionCode("");
+        shippingNoteInfos[0]=shippingNoteInfo;
+        LocationOpenApi.start(PickUpActivity.this, shippingNoteInfos, new OnResultListener() {
+            @Override
+            public void onSuccess() {
+                Log.e("LocationOpenApi","onApiStart onSuccess");
+            }
+
+            @Override
+            public void onFailure(String s, String s1) {
+                Log.e("LocationOpenApi","onApiStart onFailure="+s+";"+s1);
+            }
+        });
+
+    }
+
 }

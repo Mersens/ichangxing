@@ -30,7 +30,7 @@ public class StartCarAdapter extends RecyclerView.Adapter<StartCarAdapter.ViewHo
 
     public void setDatas(List<AssignParamsEntity> list) {
         this.list = list;
-        notifyItemRangeChanged(0, this.list.size());
+        notifyDataSetChanged();
     }
 
 

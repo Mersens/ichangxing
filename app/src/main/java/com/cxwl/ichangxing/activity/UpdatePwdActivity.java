@@ -2,6 +2,7 @@ package com.cxwl.ichangxing.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
@@ -13,10 +14,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cxwl.ichangxing.R;
+import com.cxwl.ichangxing.entity.EventEntity;
 import com.cxwl.ichangxing.entity.LoginEntity;
+import com.cxwl.ichangxing.entity.ResultEntity;
 import com.cxwl.ichangxing.entity.User;
+import com.cxwl.ichangxing.utils.RegisterCodeTimer;
+import com.cxwl.ichangxing.utils.RegisterCodeTimerService;
 import com.cxwl.ichangxing.utils.RequestManager;
 import com.cxwl.ichangxing.utils.ResultObserver;
+import com.cxwl.ichangxing.utils.RxBus;
 import com.cxwl.ichangxing.utils.SPreferenceUtil;
 import com.cxwl.ichangxing.utils.SystemUtil;
 import com.cxwl.ichangxing.view.LoadingDialogFragment;
@@ -32,9 +38,13 @@ public class UpdatePwdActivity extends BaseActivity {
     private ImageView mImgBack;
     private TextView mTextTitle;
     private EditText mEditMobile;
-    private EditText mEditOldPwd;
+    private EditText mEditCode;
     private EditText mEditNewPwd;
     private Button mBtnOk;
+    private TextView mTextGetCode;
+    private String ckMobile;
+    private String ckCode;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +56,8 @@ public class UpdatePwdActivity extends BaseActivity {
     public void init() {
         initView();
         initEvent();
+        RegisterCodeTimerService.setHandler(mCodeHandler);
+
 
     }
 
@@ -53,18 +65,19 @@ public class UpdatePwdActivity extends BaseActivity {
         mImgBack = findViewById(R.id.imgBack);
         mTextTitle = findViewById(R.id.tv_title);
         mTextTitle.setText("修改密码");
-        mEditMobile=findViewById(R.id.editPhone);
-        mEditNewPwd=findViewById(R.id.editNewPwd);
-        mEditOldPwd=findViewById(R.id.editOldPwd);
-        mBtnOk=findViewById(R.id.btnok);
-        String userInfo= SPreferenceUtil.getInstance(this).getUserinfo();
-        if(TextUtils.isEmpty(userInfo)){
+        mEditMobile = findViewById(R.id.editPhone);
+        mEditNewPwd = findViewById(R.id.editNewPwd);
+        mEditCode = findViewById(R.id.edCode);
+        mBtnOk = findViewById(R.id.btnok);
+        mTextGetCode = findViewById(R.id.tv_getCode);
+        String userInfo = SPreferenceUtil.getInstance(this).getUserinfo();
+        if (TextUtils.isEmpty(userInfo)) {
             Toast.makeText(this, "用户信息为空，请重新登录", Toast.LENGTH_SHORT).show();
             return;
         }
-        Gson gson=new Gson();
-        User user=gson.fromJson(userInfo,User.class);
-        if(null!=user){
+        Gson gson = new Gson();
+        User user = gson.fromJson(userInfo, User.class);
+        if (null != user) {
             mEditMobile.setText(user.getMobile());
             mEditMobile.setEnabled(false);
         }
@@ -85,48 +98,115 @@ public class UpdatePwdActivity extends BaseActivity {
                 doUpdate();
             }
         });
+        mTextGetCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    doGetCode();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void doGetCode() throws JSONException {
+        final String mobile = mEditMobile.getText().toString();
+        if (TextUtils.isEmpty(mobile)) {
+            Toast.makeText(this, "手机号为空！", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (mobile.length() != 11) {
+            Toast.makeText(this, "请输入正确手机号！", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        startService(new Intent(UpdatePwdActivity.this,
+                RegisterCodeTimerService.class));
+        RequestManager.getInstance()
+                .mServiceStore
+                .getMobileCode(mobile)
+                .subscribeOn(io.reactivex.schedulers.Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new ResultObserver(new RequestManager.onRequestCallBack() {
+                    @Override
+                    public void onSuccess(String msg) {
+                        Gson gson = new Gson();
+                        Log.e("getMobileCode", "getMobileCode==" + msg);
+                        if (!TextUtils.isEmpty(msg)) {
+                            ResultEntity result = gson.fromJson(msg, ResultEntity.class);
+                            if (result.getCode() == 0) {
+                                //获取成功
+                                ckCode = result.getData();
+                                ckMobile = mobile;
+                                Toast.makeText(UpdatePwdActivity.this, "验证码已发送！",
+                                        Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(UpdatePwdActivity.this, result.getMessage(),
+                                        Toast.LENGTH_SHORT).show();
+                            }
+
+                        } else {
+                            Toast.makeText(UpdatePwdActivity.this, "获取失败！",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(String msg) {
+                        Log.e("getMobileCode", "onError==" + msg);
+                        Toast.makeText(UpdatePwdActivity.this, "获取失败！" + msg, Toast.LENGTH_SHORT).show();
+
+                    }
+                }));
+
     }
 
     private void doUpdate() {
-        final String mobile=mEditMobile.getText().toString().trim();
-        final String oldPwd=mEditOldPwd.getText().toString().trim();
-        final String  newPwd=mEditNewPwd.getText().toString().trim();
-        if(TextUtils.isEmpty(mobile)){
+        final String mobile = mEditMobile.getText().toString().trim();
+        final String code = mEditCode.getText().toString().trim();
+        final String newPwd = mEditNewPwd.getText().toString().trim();
+        if (TextUtils.isEmpty(mobile)) {
             Toast.makeText(this, "手机号为空", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(TextUtils.isEmpty(oldPwd)){
-            Toast.makeText(this, "旧密码为空", Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(code)) {
+            Toast.makeText(this, "验证码为空", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(TextUtils.isEmpty(newPwd)){
+        if (TextUtils.isEmpty(newPwd)) {
             Toast.makeText(this, "新密码为空", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(oldPwd.equals(newPwd)){
-            Toast.makeText(this, "新密码与旧密码一致！", Toast.LENGTH_SHORT).show();
+        if (!code.equals(ckCode)) {
+            Toast.makeText(this, "验证码错误！", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (!mobile.equals(ckMobile)) {
+            Toast.makeText(this, "手机号码不一致！", Toast.LENGTH_SHORT).show();
             return;
         }
         LoginEntity loginEntity = new LoginEntity();
         loginEntity.setDeviceNumber(SystemUtil.getSystemModel());
         loginEntity.setMobile(mobile);
         loginEntity.setPassword(newPwd);
+        loginEntity.setVerifyCode(code);
         update(loginEntity);
 
     }
+
     private void update(final LoginEntity loginEntity) {
-        String token= SPreferenceUtil.getInstance(UpdatePwdActivity.this).getToken();
-        if(TextUtils.isEmpty(token)){
+        String token = SPreferenceUtil.getInstance(UpdatePwdActivity.this).getToken();
+        if (TextUtils.isEmpty(token)) {
             Toast.makeText(this, "token为空，请重新登录", Toast.LENGTH_SHORT).show();
             return;
         }
-        Gson gson=new Gson();
-        final LoadingDialogFragment loadingDialogFragment=LoadingDialogFragment.getInstance();
-        loadingDialogFragment.showF(getSupportFragmentManager(),"updateLoading");
+        Gson gson = new Gson();
+        final LoadingDialogFragment loadingDialogFragment = LoadingDialogFragment.getInstance();
+        loadingDialogFragment.showF(getSupportFragmentManager(), "updateLoading");
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json"), gson.toJson(loginEntity));
         RequestManager.getInstance()
                 .mServiceStore
-                .updatePassword(token,body)
+                .updatePassword(token, body)
                 .subscribeOn(io.reactivex.schedulers.Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new ResultObserver(new RequestManager.onRequestCallBack() {
@@ -134,35 +214,65 @@ public class UpdatePwdActivity extends BaseActivity {
                     public void onSuccess(String msg) {
                         loadingDialogFragment.dismissAllowingStateLoss();
                         Log.e("oftenLineDel", "oftenLineDel==" + msg);
-                        if(!TextUtils.isEmpty(msg)){
+                        if (!TextUtils.isEmpty(msg)) {
                             try {
-                                JSONObject object=new JSONObject(msg);
-                                if(object.getInt("code")==0){
+                                JSONObject object = new JSONObject(msg);
+                                if (object.getInt("code") == 0) {
                                     //修改成功
+                                    RxBus.getInstance().send(new EventEntity(EventEntity.FINISH));
                                     Toast.makeText(UpdatePwdActivity.this, "修改成功！", Toast.LENGTH_SHORT).show();
-                                    Intent intent= new Intent(UpdatePwdActivity.this, LoginActivity.class);
-                                    intent.putExtra("mobile",loginEntity.getMobile());
+                                    Intent intent = new Intent(UpdatePwdActivity.this, LoginActivity.class);
+                                    intent.putExtra("mobile", loginEntity.getMobile());
                                     startActivity(intent);
                                     overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
                                     finish();
 
-                                }else {
+                                } else {
                                     Toast.makeText(UpdatePwdActivity.this, object.getString("message"),
                                             Toast.LENGTH_SHORT).show();
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                        }else {
+                        } else {
                             Toast.makeText(UpdatePwdActivity.this, "修改失败！", Toast.LENGTH_SHORT).show();
                         }
                     }
+
                     @Override
                     public void onError(String msg) {
                         loadingDialogFragment.dismissAllowingStateLoss();
                         Log.e("oftenLineDel", "onError==" + msg);
-                        Toast.makeText(UpdatePwdActivity.this, "修改失败！"+msg, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UpdatePwdActivity.this, "修改失败！" + msg, Toast.LENGTH_SHORT).show();
                     }
                 }));
+    }
+
+
+    Handler mCodeHandler = new Handler() {
+        public void handleMessage(android.os.Message msg) {
+            if (msg.what == RegisterCodeTimer.IN_RUNNING) {// 正在倒计时
+                mTextGetCode.setText(msg.obj.toString());
+                mTextGetCode.setEnabled(false);
+            } else if (msg.what == RegisterCodeTimer.END_RUNNING) {// 完成倒计时
+                mTextGetCode.setEnabled(true);
+                mTextGetCode.setText("获取验证码");
+            }
+        }
+
+        ;
+    };
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        stopTimerService();
+        mCodeHandler.removeCallbacksAndMessages(null);
+    }
+
+
+    public void stopTimerService() {
+        stopService(new Intent(UpdatePwdActivity.this,
+                RegisterCodeTimerService.class));
     }
 }

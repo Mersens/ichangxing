@@ -30,7 +30,7 @@ public class SQAdapter extends RecyclerView.Adapter<SQAdapter.ViewHolder> {
 
     public void setDatas(List<SQEntity> list){
         this.list=list;
-        notifyItemRangeChanged(0,this.list.size());
+        notifyDataSetChanged();
     }
 
     @NonNull

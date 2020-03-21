@@ -44,7 +44,6 @@ public class RegisterActivity extends BaseActivity {
     private String ckMobile;
     private String ckCode;
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -156,6 +156,7 @@ public class OrderDetailsActivity extends BaseActivity {
             public void onClick(View v) {
                 Intent intent=new Intent(OrderDetailsActivity.this,PickUpActivity.class);
                 intent.putExtra("trackId",assignParamsEntity.getTrackId());
+                intent.putExtra("orderNo",assignParamsEntity.getOrderNo());
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
 
@@ -166,6 +167,7 @@ public class OrderDetailsActivity extends BaseActivity {
             public void onClick(View v) {
                 Intent intent=new Intent(OrderDetailsActivity.this,UnLoadActivity.class);
                 intent.putExtra("trackId",assignParamsEntity.getTrackId());
+                intent.putExtra("orderNo",assignParamsEntity.getOrderNo());
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
             }
@@ -378,7 +380,7 @@ public class OrderDetailsActivity extends BaseActivity {
                 mImgZHWC.setVisibility(View.VISIBLE);
                 ispickup=true;
             }
-            if(bean.getCode().equals("unload") && bean.isStatus()){
+            if(bean.getCode().equals("receipt") && bean.isStatus()){
                 mImgXHWC.setVisibility(View.VISIBLE);
                 isUnload=true;
             }

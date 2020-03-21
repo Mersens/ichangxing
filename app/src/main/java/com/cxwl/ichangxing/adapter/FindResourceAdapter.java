@@ -32,7 +32,7 @@ public class FindResourceAdapter extends RecyclerView.Adapter<FindResourceAdapte
 
     public void setDatas(List<GrabParamsEntity> list) {
         this.list = list;
-        notifyItemRangeChanged(0, this.list.size());
+        notifyDataSetChanged();
     }
 
 
@@ -55,7 +55,7 @@ public class FindResourceAdapter extends RecyclerView.Adapter<FindResourceAdapte
         holder.mTextZHSJ.setText(DateUtils.stampToDate(entity.getLoadDate()+"","yyyy-MM-dd HH:mm:ss"));
         holder.mTextBZ.setText(entity.getRemark());
         holder.mTextSY.setText(entity.getSurplusNum()+"车");
-        holder.mTextHWMC.setOnClickListener(new View.OnClickListener() {
+        holder.mTextQD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(listener!=null){

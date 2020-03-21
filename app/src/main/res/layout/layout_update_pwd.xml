@@ -62,45 +62,8 @@
             android:background="@color/color_line_text"
             />
 
-        <RelativeLayout
-            android:layout_height="48dp"
-            android:layout_marginTop="8dp"
-            android:layout_width="match_parent"
-            >
 
-            <ImageView
-                android:id="@+id/ivpass"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="7dp"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:layout_centerVertical="true"
-                android:src="@mipmap/icon_key" />
 
-            <EditText
-                android:layout_toRightOf="@+id/ivpass"
-                android:id="@+id/editOldPwd"
-                android:shadowDx="0.0"
-                android:shadowDy="1.0"
-                android:shadowRadius="1.0"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="7dp"
-                android:layout_marginRight="7dp"
-                android:textSize="14sp"
-                android:background="@null"
-                android:singleLine="true"
-                android:hint="旧密码"
-                android:inputType="textPassword"
-                android:textColor="@color/text_color_black"
-                android:textColorHint="@color/color_text_gray" />
-
-        </RelativeLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/color_line_text"
-            />
         <RelativeLayout
             android:layout_height="48dp"
             android:layout_marginTop="8dp"
@@ -140,7 +103,62 @@
             android:layout_height="1dp"
             android:background="@color/color_line_text"
             />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="8dp"
+            >
 
+            <ImageView
+                android:id="@+id/ivinfo"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="7dp"
+                android:src="@mipmap/icon_yanzheng" />
+
+            <EditText
+                android:id="@+id/edCode"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="7dp"
+                android:layout_marginRight="7dp"
+                android:layout_toRightOf="@+id/ivinfo"
+                android:background="@null"
+                android:hint="请输入验证码"
+                android:maxLength="11"
+                android:shadowDx="0.0"
+                android:shadowDy="1.0"
+                android:shadowRadius="1.0"
+                android:singleLine="true"
+                android:inputType="number"
+                android:textColor="@color/text_color_black"
+                android:textColorHint="@color/color_text_gray"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_getCode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="7dp"
+                android:text="获取验证码"
+                android:textColor="@color/base_color_text_white"
+                android:background="@drawable/tv_getcode_bg"
+                android:paddingTop="4dp"
+                android:gravity="center"
+                android:paddingBottom="4dp"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"
+                android:textSize="10sp" />
+        </RelativeLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/color_line_text"
+            />
         <View
             android:layout_width="match_parent"
             android:layout_height="40dp"

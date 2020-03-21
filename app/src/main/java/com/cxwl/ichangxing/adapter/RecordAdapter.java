@@ -3,6 +3,7 @@ package com.cxwl.ichangxing.adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +33,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
 
     public void setDatas(List<OrderBoEntity> list) {
         this.list = list;
-        notifyItemRangeChanged(0, this.list.size());
+        notifyDataSetChanged();
     }
 
 
@@ -58,7 +59,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
             if(loadAddrs.size()>0){
                 for (int j=0;j<loadAddrs.size();j++){
                     OrderBoEntity.LoadAddrBosBean bosBean=loadAddrs.get(j);
-                    holder.mLayoutAddr.addView(getAddrView("装货地址"+j,bosBean.getFullAddr()));
+                    holder.mLayoutAddr.addView(getAddrView("装货地址"+(j+1)+":",bosBean.getFullAddr()));
                 }
             }
         }
@@ -67,7 +68,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
             if(receiveAddr.size()>0){
                 for (int K=0;K<receiveAddr.size();K++){
                     OrderBoEntity.ReceiveAddrBosBean receiveBean=receiveAddr.get(K);
-                    holder.mLayoutAddr.addView(getAddrView("卸货地址"+K,receiveBean.getFullAddr()));
+                    holder.mLayoutAddr.addView(getAddrView("卸货地址"+(K+1)+":",receiveBean.getFullAddr()));
                 }
             }
         }
@@ -75,6 +76,11 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
         holder.mTextKDGS.setText(entity.getExpressName());
         holder.mTextWLDH.setText(entity.getExpressNo());
         int totalOutStatus=entity.getTotalOutStatus();
+        if(!TextUtils.isEmpty(entity.getExpressName())&& !TextUtils.isEmpty(entity.getExpressNo())){
+            holder.mBtn.setText("已寄送");
+        }else {
+            holder.mBtn.setText("回单寄送");
+        }
         if(totalOutStatus==0){
             holder.mTextSKZZ.setText("未支付");
         }else if(totalOutStatus==1){
@@ -98,6 +104,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
     private View getAddrView(String key,String value){
         View view=mInflater.inflate(R.layout.layout_addr_view,null);
         TextView name=view.findViewById(R.id.name);
+        name.setTextColor(mContext.getResources().getColor(R.color.text_color_black));
         name.setText(key);
         TextView vName=view.findViewById(R.id.tv_name);
         vName.setText(value);

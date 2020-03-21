@@ -67,7 +67,7 @@ public class StartFragment extends BaseFragment {
         int color = getResources().getColor(R.color.actionbar_color);
         swipeRefreshLayout.setColorSchemeColors(color, color, color);
         recyclerView.setItemAnimator(null);
-        recyclerView.setLayoutManager(new RecyclerViewNoBugLinearLayoutManager(getActivity()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setItemAnimator(null);
         adapter=new StartCarAdapter(getActivity(),mList);
         recyclerView.setAdapter(adapter);
@@ -232,6 +232,7 @@ public class StartFragment extends BaseFragment {
     }
     private void refreshDatas() {
         mList.clear();
+        adapter.setDatas(mList);
         isRefresh = true;
         isLoadMore = false;
         isLoadMoreEmpty = false;
@@ -287,6 +288,12 @@ public class StartFragment extends BaseFragment {
                                             isLoadMoreEmpty = true;
                                         }
                                         isLoadMoreEmpty = true;
+                                        if(isRefresh){
+                                            mLayoutNoMsg.setVisibility(View.VISIBLE);
+                                            isRefresh=false;
+                                            mList.clear();
+                                            adapter.setDatas(mList);
+                                        }
                                         return;
                                     }else {
                                         isFirst = false;

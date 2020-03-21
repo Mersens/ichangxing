@@ -212,6 +212,9 @@ public class MyInfoFragment extends BaseFragment implements View.OnClickListener
                                     if(count>0){
                                         mTextMsgCount.setText(count+"");
                                         mTextMsgCount.setVisibility(View.VISIBLE);
+                                    }else {
+                                        mTextMsgCount.setText("0");
+                                        mTextMsgCount.setVisibility(View.GONE);
                                     }
                                 }
                             } catch (JSONException e) {

@@ -32,7 +32,7 @@ public class OftenLineListAdapter extends RecyclerView.Adapter<OftenLineListAdap
 
     public void setDatas(List<DedicatedLineBoEntity> list){
         this.list=list;
-        notifyItemRangeChanged(0,this.list.size());
+        notifyDataSetChanged();
     }
 
 

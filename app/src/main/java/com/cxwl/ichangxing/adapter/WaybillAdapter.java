@@ -33,7 +33,7 @@ public class WaybillAdapter extends RecyclerView.Adapter<WaybillAdapter.ViewHold
 
     public void setDatas(List<AssignParamsEntity> list) {
         this.list = list;
-        notifyItemRangeChanged(0, this.list.size());
+        notifyDataSetChanged();
     }
 
 

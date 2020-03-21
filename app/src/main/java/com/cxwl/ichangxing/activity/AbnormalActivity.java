@@ -104,14 +104,11 @@ public class AbnormalActivity extends BaseActivity implements View.OnClickListen
                                 JSONObject object = new JSONObject(msg);
                                 if (object.getInt("code") == 0) {
                                     //成功
-                                    JSONArray array = object.getJSONArray("data");
-                                    if (array.length() > 0) {
-                                        JSONObject jsonObject = array.getJSONObject(0);
+                                    JSONObject jsonObject = object.getJSONObject("data");
                                         Gson gson = new Gson();
                                         TrackException trackLoadEntity = gson.fromJson(jsonObject.toString(), TrackException.class);
                                         setLoadInfo(trackLoadEntity);
 
-                                    }
 
 
                                 } else {
@@ -389,6 +386,9 @@ public class AbnormalActivity extends BaseActivity implements View.OnClickListen
                                 JSONObject object = new JSONObject(msg);
                                 if (object.getInt("code") == 0) {
                                     //上传成功
+                                    mBtn.setBackgroundResource(R.drawable.btn_noclick_bg);
+                                    mBtn.setEnabled(false);
+                                    mBtn.setClickable(false);
                                     Toast.makeText(AbnormalActivity.this, "上传成功！", Toast.LENGTH_SHORT).show();
 
                                 } else {

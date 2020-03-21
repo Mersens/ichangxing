@@ -1,8 +1,13 @@
 package com.cxwl.ichangxing.activity;
+
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -76,7 +81,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private TextView mTextTitle;
     private RelativeLayout mLayoutToolbar;
     private TextView mTextRightTitle;
-    private int status=0;
+    private int status = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +95,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         selectColor = getResources().getColor(R.color.actionbar_color);
         unSelectColor = getResources().getColor(R.color.color_text_gray);
         initViews();
+        getPersimmions();
         initEvents();
         initdatas();
         initOpenApi(this);
@@ -115,6 +122,65 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     }
 
+    @TargetApi(23)
+    private void getPersimmions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            ArrayList<String> permissions = new ArrayList<String>();
+            /***
+             * 定位权限为必须权限，用户如果禁止，则每次进入都会申请
+             */
+            // 定位精确位置
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
+            }
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
+            }
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            }
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+            }
+            /*
+             * 读写权限和电话状态权限非必要权限(建议授予)只会申请一次，用户同意或者禁止，只会弹一次
+             */
+            // 读写权限
+            if (addPermission(permissions, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            }
+            // 读取电话状态权限
+            if (addPermission(permissions, Manifest.permission.READ_PHONE_STATE)) {
+            }
+
+            if (permissions.size() > 0) {
+                requestPermissions(permissions.toArray(new String[permissions.size()]), SDK_PERMISSION_REQUEST);
+            }
+        }
+    }
+
+    @TargetApi(23)
+    private boolean addPermission(ArrayList<String> permissionsList, String permission) {
+        if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) { // 如果应用没有获得对应权限,则添加到列表中,准备批量申请
+            if (shouldShowRequestPermissionRationale(permission)) {
+                return true;
+            } else {
+                permissionsList.add(permission);
+                return false;
+            }
+
+        } else {
+            return true;
+        }
+    }
+
+    @TargetApi(23)
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        // TODO Auto-generated method stub
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+    }
+
     private void initBus() {
         mCompositeDisposable = new CompositeDisposable();
         //监听订阅事件
@@ -128,9 +194,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                         if (o instanceof EventEntity) {
                             EventEntity e = (EventEntity) o;
                             int type = e.type;
-                            if (type==EventEntity.START_CAR) {
+                            if (type == EventEntity.START_CAR) {
                                 RxBus.getInstance().send(new EventEntity(EventEntity.START_CAR_REFRESH));
-                                mViewPager.setCurrentItem(2);
+                                index = 2;
+                                setTabColor(index);
+                            } else if (type == EventEntity.FINISH) {
+                                MainActivity.this.finish();
+                                SPreferenceUtil.getInstance(MainActivity.this).setUserId(null);
+                                SPreferenceUtil.getInstance(MainActivity.this).setUserinfo(null);
+                                SPreferenceUtil.getInstance(MainActivity.this).setToken(null);
                             }
                         }
                     }
@@ -159,13 +231,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private void initdatas() {
 
-        String token= SPreferenceUtil.getInstance(MainActivity.this).getToken();
-        if(TextUtils.isEmpty(token)){
+        String token = SPreferenceUtil.getInstance(MainActivity.this).getToken();
+        if (TextUtils.isEmpty(token)) {
             Toast.makeText(MainActivity.this, "token为空，请重新登录", Toast.LENGTH_SHORT).show();
             return;
         }
         getUserInfo(token);
-        String userinfo= SPreferenceUtil.getInstance(this).getUserinfo();
+        String userinfo = SPreferenceUtil.getInstance(this).getUserinfo();
        /* if(!TextUtils.isEmpty(userinfo) ){
             Gson gson=new Gson();
             User user=gson.fromJson(userinfo,User.class);
@@ -175,6 +247,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             return;
         }*/
     }
+
     private void getUserInfo(String token) {
         RequestManager.getInstance()
                 .mServiceStore
@@ -185,25 +258,28 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     @Override
                     public void onSuccess(String msg) {
                         Log.e("incomeSt", "incomeSt==" + msg);
-                        if(!TextUtils.isEmpty(msg)){
+                        if (!TextUtils.isEmpty(msg)) {
                             try {
-                                JSONObject object=new JSONObject(msg);
-                                if(object.getInt("code")==0){
-                                    JSONObject jsonObject=object.getJSONObject("data");
+                                JSONObject object = new JSONObject(msg);
+                                if (object.getInt("code") == 0) {
+                                    JSONObject jsonObject = object.getJSONObject("data");
                                     SPreferenceUtil.getInstance(MainActivity.this)
                                             .setUserinfo(jsonObject.toString());
-                                    Gson gson=new Gson();
-                                    User user=gson.fromJson(jsonObject.toString(),User.class);
+                                    Gson gson = new Gson();
+                                    User user = gson.fromJson(jsonObject.toString(), User.class);
                                     setUseInfo(user);
-                                }else {
-                                    Toast.makeText(MainActivity.this, object.getString("message"),
-                                            Toast.LENGTH_SHORT).show();
+                                } else if (object.getInt("code") == 2) {
+                                    String message = object.getString("message");
+                                    showTokenView(message);
+                                } else {
+                                    Toast.makeText(MainActivity.this, object.getString("message"), Toast.LENGTH_SHORT).show();
+
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
 
-                        }else {
+                        } else {
                             Toast.makeText(MainActivity.this, "获取失败！", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -211,11 +287,37 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     @Override
                     public void onError(String msg) {
                         Log.e("getLoad", "onError==" + msg);
-                        Toast.makeText(MainActivity.this, "获取失败！"+msg, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "获取失败！" + msg, Toast.LENGTH_SHORT).show();
                     }
                 }));
 
     }
+
+    private void showTokenView(String message) {
+        final ExitDialogFragment exitDialogFragment = ExitDialogFragment.getInstance(message);
+        exitDialogFragment.showF(getSupportFragmentManager(), "showTokenView");
+        exitDialogFragment.setOnDialogClickListener(new ExitDialogFragment.OnDialogClickListener() {
+            @Override
+            public void onClickCancel() {
+                exitDialogFragment.dismissAllowingStateLoss();
+            }
+
+            @Override
+            public void onClickOk() {
+                exitDialogFragment.dismissAllowingStateLoss();
+                SPreferenceUtil.getInstance(MainActivity.this).setUserId(null);
+                SPreferenceUtil.getInstance(MainActivity.this).setUserinfo(null);
+                SPreferenceUtil.getInstance(MainActivity.this).setToken(null);
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                intent.putExtra("mobile", "");
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+                finish();
+            }
+        });
+
+    }
+
     private void initViews() {
         mLayoutYD = findViewById(R.id.layout_yd);
         mLayoutZH = findViewById(R.id.layout_zh);
@@ -237,18 +339,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
         mTextTitle = findViewById(R.id.tv_title);
         mTextTitle.setText("运单");
-        mTextRightTitle=findViewById(R.id.tv_right_title);
+        mTextRightTitle = findViewById(R.id.tv_right_title);
         mTextRightTitle.setVisibility(View.GONE);
     }
-    private void setUseInfo(User user) {
-        if(user!=null){
-            status=user.getVerificationStatus();
 
-            if(user.getVerificationStatus()==0){
+    private void setUseInfo(User user) {
+        if (user != null) {
+            status = user.getVerificationStatus();
+            if (user.getVerificationStatus() == 0) {
                 //未认证
                 showRzRusultView("用户未认证,请进行实名认证！");
 
-            }else if(user.getVerificationStatus()==3){
+            } else if (user.getVerificationStatus() == 3) {
                 //认证失败
                 showRzRusultView("用户认证未通过,请重新进行实名认证！");
             }
@@ -256,9 +358,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
     }
 
-    private void showRzRusultView(String msg){
-        final ExitDialogFragment dialogFragment=ExitDialogFragment.getInstance(msg);
-        dialogFragment.showF(getSupportFragmentManager(),"showRzRusultView");
+    private void showRzRusultView(String msg) {
+        final ExitDialogFragment dialogFragment = ExitDialogFragment.getInstance(msg);
+        dialogFragment.showF(getSupportFragmentManager(), "showRzRusultView");
         dialogFragment.setOnDialogClickListener(new ExitDialogFragment.OnDialogClickListener() {
             @Override
             public void onClickCancel() {
@@ -268,7 +370,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             @Override
             public void onClickOk() {
                 dialogFragment.dismissAllowingStateLoss();
-                Intent intent=new Intent(MainActivity.this,UserRzActivity.class);
+                Intent intent = new Intent(MainActivity.this, UserRzActivity.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
 
@@ -297,7 +399,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 setTabColor(index);
                 break;
             case R.id.tv_right_title:
-                Intent mIntent=new Intent(MainActivity.this, StartCarRecordActivity.class);
+                Intent mIntent = new Intent(MainActivity.this, StartCarRecordActivity.class);
                 startActivity(mIntent);
                 overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
                 break;
@@ -380,7 +482,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             }
         });
     }
-
 
 
     @Override

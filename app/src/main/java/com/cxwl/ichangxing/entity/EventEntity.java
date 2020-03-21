@@ -10,6 +10,8 @@ public class EventEntity {
     public static final int START_CAR_REFRESH=10003;
     public static final int RECORD_REFRESH=10004;
     public static final int USER_INFO_REFRESH=10005;
+    public static final int WAYBILL_INFO_REFRESH=10006;
+    public static final int FINISH=10007;
     public int type;
     public String value;
     public EventEntity(){

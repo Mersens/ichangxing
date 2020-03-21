@@ -67,6 +67,7 @@ public class ReceiptActivity extends BaseActivity{
     private String expressNo;
     private String url;
     private ImageView img_arr;
+    int receiptStatus=0;
     ExpressBoEntity entity=new ExpressBoEntity();
 
     @Override
@@ -83,6 +84,7 @@ public class ReceiptActivity extends BaseActivity{
         expressName=getIntent().getStringExtra("expressName");
         expressNo=getIntent().getStringExtra("expressNo");
         url=getIntent().getStringExtra("url");
+        receiptStatus=getIntent().getIntExtra("receiptStatus",0);
         entity.setOrderNo(orderNo);
         initView();
         initEvent();
@@ -118,6 +120,16 @@ public class ReceiptActivity extends BaseActivity{
         mTexJSDZ.setText(addr);
         mEditKDGS.setText(expressName);
         mEditKDDH.setText(expressNo);
+        if(!TextUtils.isEmpty(expressName)&& !TextUtils.isEmpty(expressNo)){
+            mBtn.setVisibility(View.GONE);
+        }else {
+            mBtn.setVisibility(View.VISIBLE);
+        }
+        if(receiptStatus==1){
+
+        }else {
+
+        }
         img_arr=findViewById(R.id.img_arr);
         if(!TextUtils.isEmpty(url)){
             Glide.with(ReceiptActivity.this)
@@ -296,15 +308,15 @@ public class ReceiptActivity extends BaseActivity{
         final String kddh=mEditKDDH.getText().toString().trim();
         entity.setExpressName(kdgs);
         entity.setExpressNo(kddh);
-        if(!TextUtils.isEmpty(entity.getExpressImg())){
+        if(TextUtils.isEmpty(entity.getExpressImg())){
             Toast.makeText(this, "请上传照片", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(!TextUtils.isEmpty(entity.getExpressName())){
+        if(TextUtils.isEmpty(entity.getExpressName())){
             Toast.makeText(this, "请填写快递公司名称", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(!TextUtils.isEmpty(entity.getExpressNo())){
+        if(TextUtils.isEmpty(entity.getExpressNo())){
             Toast.makeText(this, "请填写快递单号", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -326,7 +338,7 @@ public class ReceiptActivity extends BaseActivity{
                     @Override
                     public void onSuccess(String msg) {
                         dialogFragment.dismissAllowingStateLoss();
-                        Log.e("receipt", "drive==" + msg);
+                        Log.e("receipt1111", "drive==" + msg);
                         if(!TextUtils.isEmpty(msg)){
                             try {
                                 JSONObject object=new JSONObject(msg);

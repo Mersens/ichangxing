@@ -92,6 +92,7 @@ public class MsgCenterActivity extends BaseActivity {
         msgMenuFragment.setOnDialogClickListener(new MsgMenuFragment.OnDialogClickListener() {
             @Override
             public void onSelect(int readStatus) {
+                msgMenuFragment.dismissAllowingStateLoss();
                 saveStatus(entity,readStatus);
             }
         });

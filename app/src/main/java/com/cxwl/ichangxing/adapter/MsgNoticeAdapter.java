@@ -34,7 +34,7 @@ public class MsgNoticeAdapter extends RecyclerView.Adapter<MsgNoticeAdapter.View
 
     public void setDatas(List<MsgNoticeEntity> list){
         this.list=list;
-        notifyItemRangeChanged(0,this.list.size());
+        notifyDataSetChanged();
     }
 
 

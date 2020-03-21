@@ -75,7 +75,7 @@ public class RecordWeekFragment extends BaseFragment {
         int color = getResources().getColor(R.color.actionbar_color);
         swipeRefreshLayout.setColorSchemeColors(color, color, color);
         recyclerView.setItemAnimator(null);
-        recyclerView.setLayoutManager(new RecyclerViewNoBugLinearLayoutManager(getActivity()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setItemAnimator(null);
         adapter=new RecordAdapter(getActivity(),mList);
         recyclerView.setAdapter(adapter);
@@ -166,7 +166,6 @@ public class RecordWeekFragment extends BaseFragment {
                         isLoadMore = true;
                         if (!isLoadMoreEmpty) {
                             pageCurrent = pageCurrent + 1;
-                            Toast.makeText(getActivity(), "正在加载第" + pageCurrent + "页", Toast.LENGTH_SHORT).show();
                             initData();
                         }
                     }
@@ -187,6 +186,7 @@ public class RecordWeekFragment extends BaseFragment {
 
     private void refreshDatas() {
         mList.clear();
+        adapter.setDatas(mList);
         isRefresh = true;
         isLoadMore = false;
         isLoadMoreEmpty = false;
@@ -230,6 +230,11 @@ public class RecordWeekFragment extends BaseFragment {
                                         if (isLoadMore) {
                                             isLoadMore = false;
                                             isLoadMoreEmpty = true;
+                                        }
+                                        if(isRefresh){
+                                            isRefresh=false;
+                                            mList.clear();
+                                            adapter.setDatas(mList);
                                         }
                                         isLoadMoreEmpty = true;
                                         return;

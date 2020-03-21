@@ -9,13 +9,33 @@ android {
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
-
+        javaCompileOptions {
+            annotationProcessorOptions {
+                includeCompileClasspath = true
+            }
+        }
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
+    signingConfigs{
+        signConfig {
+            storeFile file ('./keystore/ichangxing.jks')
+            storePassword '123456' //密码
+            keyAlias 'ichangxing'
+            keyPassword '123456'  //密码
+        }
+    }
+
     buildTypes {
         release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.signConfig
+        }
+        debug{
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.signConfig
         }
     }
     sourceSets {
