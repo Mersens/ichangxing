@@ -24,6 +24,7 @@ import com.cxwl.ichangxing.activity.IncomeMoneyActivity;
 import com.cxwl.ichangxing.activity.LoginActivity;
 import com.cxwl.ichangxing.activity.MsgCenterActivity;
 import com.cxwl.ichangxing.activity.OftenLineActivity;
+import com.cxwl.ichangxing.activity.SuggActivity;
 import com.cxwl.ichangxing.activity.UpdatePwdActivity;
 import com.cxwl.ichangxing.activity.UserRzActivity;
 import com.cxwl.ichangxing.app.Constants;
@@ -61,6 +62,7 @@ public class MyInfoFragment extends BaseFragment implements View.OnClickListener
     private RelativeLayout mLayoutSQJL;
     private RelativeLayout mLayoutYHK;
     private RelativeLayout mLayoutKF;
+    private RelativeLayout mLayoutTSFK;
     private int status=0;
     private TextView mTextMsgCount;
     @Override
@@ -82,6 +84,7 @@ public class MyInfoFragment extends BaseFragment implements View.OnClickListener
         mLayoutYHK = view.findViewById(R.id.layout_yhk);
         mTextStatus=view.findViewById(R.id.tv_status);
         mLayoutKF=view.findViewById(R.id.layout_kf);
+        mLayoutTSFK=view.findViewById(R.id.layout_tsfk);
         mTextMsgCount=view.findViewById(R.id.tv_msg_count);
         mTextName.setText("未登录");
         initEvent();
@@ -173,6 +176,7 @@ public class MyInfoFragment extends BaseFragment implements View.OnClickListener
         mLayoutSQJL.setOnClickListener(this);
         mLayoutYHK.setOnClickListener(this);
         mLayoutKF.setOnClickListener(this);
+        mLayoutTSFK.setOnClickListener(this);
 
 
     }
@@ -287,6 +291,9 @@ public class MyInfoFragment extends BaseFragment implements View.OnClickListener
                 break;
             case R.id.layout_yhk:
                 mIntent=new Intent(getActivity(), StartCarRecordActivity.class);
+                break;
+            case R.id.layout_tsfk:
+                mIntent=new Intent(getActivity(), SuggActivity.class);
                 break;
             case R.id.layout_kf:
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

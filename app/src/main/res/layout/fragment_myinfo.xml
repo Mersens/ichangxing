@@ -367,6 +367,41 @@
                     />
             </RelativeLayout>
             <RelativeLayout
+                android:id="@+id/layout_tsfk"
+                android:layout_height="48dp"
+                android:layout_width="match_parent"
+                android:layout_marginTop="1dp"
+                android:background="@color/base_color_text_white"
+                >
+                <ImageView
+                    android:layout_height="24dp"
+                    android:layout_width="24dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:id="@+id/img_tsfk"
+                    android:src="@mipmap/icon_fk"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="投诉反馈"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/img_tsfk"
+                    android:textSize="14sp"
+                    android:textColor="@color/actionbar_color"
+                    />
+                <ImageView
+                    android:layout_height="17dp"
+                    android:layout_width="10dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="16dp"
+                    android:src="@mipmap/icon_arr_gr"
+                    />
+            </RelativeLayout>
+            <RelativeLayout
                 android:id="@+id/layout_exit"
                 android:layout_height="48dp"
                 android:layout_width="match_parent"

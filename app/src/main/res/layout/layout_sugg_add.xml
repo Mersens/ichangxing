@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/base_color_text_white"
+    android:fitsSystemWindows="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
+
+    <include layout="@layout/layout_toolbar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="42dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="内容"
+                        android:textSize="14sp" />
+
+                </RelativeLayout>
+
+                <com.cxwl.ichangxing.view.ContainsEmojiEditText
+                    android:id="@+id/editText"
+                    android:layout_width="match_parent"
+                    android:padding="8dp"
+                    android:layout_height="100dp"
+                    android:background="@drawable/bg_input_gray"
+                    android:gravity="top"
+                    android:hint="请输入内容"
+                    android:maxLines="10"
+                    android:textColorHint="@color/color_line_text"
+                    android:textCursorDrawable="@null"
+                    android:textSize="@dimen/text_size_medium" />
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="42dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="附件"
+                        android:textSize="14sp" />
+
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_height="80dp"
+                    android:layout_width="match_parent"
+                    >
+                    <ImageView
+                        android:layout_width="58dp"
+                        android:layout_height="58dp"
+                        android:layout_centerVertical="true"
+                        android:src="@mipmap/icon_photo_yao"
+                        android:scaleType="centerCrop"
+                        />
+                </RelativeLayout>
+                <View
+                    android:layout_height="1dp"
+                    android:layout_width="match_parent"
+                    android:background="@color/color_line_text"
+                    />
+
+                <RelativeLayout
+                    android:layout_height="48dp"
+                    android:layout_width="match_parent"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="联系方式："
+                        android:layout_centerVertical="true"
+                        android:textSize="14sp"
+                        android:id="@+id/tv_conn"
+                        />
+
+                    <EditText
+                        android:layout_toRightOf="@+id/tv_conn"
+                        android:id="@+id/editConn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:textSize="14sp"
+                        android:inputType="text"
+                        android:background="@null"
+                        android:singleLine="true"
+                        android:text=""
+                        android:hint="请输入联系方式"
+                        android:textColorHint="@color/color_text_gray" />
+
+                </RelativeLayout>
+                <View
+                    android:layout_height="1dp"
+                    android:layout_width="match_parent"
+                    android:background="@color/color_line_text"
+                    />
+                <View
+                    android:layout_height="30dp"
+                    android:layout_width="match_parent"
+                    />
+
+                <Button
+                    android:id="@+id/btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="42dp"
+                    android:text="提交"
+                    android:textColor="@color/base_color_text_white"
+                    android:textSize="14sp"
+                    android:background="@drawable/btn_login_bg"
+                    />
+                <View
+                    android:layout_height="24dp"
+                    android:layout_width="match_parent"
+                    />
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</LinearLayout>
